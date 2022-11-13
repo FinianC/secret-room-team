@@ -1,0 +1,34 @@
+server:
+  port: 9096
+  servlet:
+    context-path: /api
+spring:
+  redirect_uri: http://xiaofei.omnrj.com/api
+  config:
+    name: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://1.116.126.119:3306/jiamei_two_card?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+    username: jiamei_two_card
+    password: jkiijffLyTxYJCPn
+  servlet:
+    multipart:
+      max-file-size: 10GB
+      max-request-size: 10GB
+  redis:
+    host: 47.100.68.162
+    port: 6379
+    password: 2428865264
+    timeout: 3000
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
+  mapper-locations:
+    - classpath:mapper/*.xml
+
+wechat:
+  appId: wx4be76fcc1ea24095
+  appSecret: 5984430fae5c7add413ae8e114b8c983
+  openId:
+  isDebug: false
