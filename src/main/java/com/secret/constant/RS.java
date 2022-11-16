@@ -41,7 +41,9 @@ public enum RS {
 
 	MENU_NOT_FOUNT(2002,"无权限访问。"),
 
-	NO_PUBLISHING_PERMISSION(2003,"无发布车队权限，有需要可找群主开通。")
+	NO_PUBLISHING_PERMISSION(2003,"无发布车队权限，有需要可找群主开通。"),
+
+	DO_NOT_JOIN_AGAIN(2004,"请勿重复加入。")
 	;
 
 	private final int status;

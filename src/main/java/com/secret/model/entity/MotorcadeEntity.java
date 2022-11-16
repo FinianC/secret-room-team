@@ -3,6 +3,8 @@ package com.secret.model.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -36,6 +38,14 @@ public class MotorcadeEntity implements Serializable {
     @ApiModelProperty(value = "标题")
     @TableField("title")
     private String title;
+
+    @ApiModelProperty(value = "价格")
+    @TableField("price")
+    private BigDecimal price;
+
+    @ApiModelProperty(value = "主题")
+    @TableField("theme")
+    private String theme;
 
     @ApiModelProperty(value = "恐怖等级")
     @TableField("terror_level")

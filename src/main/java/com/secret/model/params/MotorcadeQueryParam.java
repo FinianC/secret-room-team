@@ -14,4 +14,5 @@ public class MotorcadeQueryParam extends BasePageParam {
 
     @ApiModelProperty("车队类型")
     private Integer typeId;
+    
 }

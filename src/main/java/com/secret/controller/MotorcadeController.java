@@ -66,9 +66,16 @@ public class MotorcadeController {
 
     @ApiOperation(value = "分页查询大厅车队信息", httpMethod = "POST")
     @PostMapping("/page")
-    public R<Page<MotorcadeVo>> updateInformation(@RequestBody MotorcadeQueryParam motorcadeQueryParam) {
+    public R<Page<MotorcadeVo>> page(@RequestBody MotorcadeQueryParam motorcadeQueryParam) {
         Page<MotorcadeVo> motorcadeVoPage = motorcadeService.getMotorcadeVoPage(motorcadeQueryParam);
         return R.success(motorcadeVoPage);
+    }
+
+    @ApiOperation(value = "车队详情", httpMethod = "POST")
+    @PostMapping("/detail/{id}")
+    public R<Page<MotorcadeVo>> detail( @PathVariable Integer id) {
+        MotorcadeVo motorcadeVo = motorcadeService.getMotorcadeVo(id);
+        return R.success(motorcadeVo);
     }
 
 }

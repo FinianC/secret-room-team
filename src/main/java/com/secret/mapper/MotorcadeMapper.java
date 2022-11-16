@@ -5,6 +5,7 @@ import com.secret.model.entity.MotorcadeEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.MotorcadeVo;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -20,4 +21,6 @@ public interface MotorcadeMapper extends BaseMapper<MotorcadeEntity> {
      MotorcadeVo getMotorcadeVoById(Integer id);
 
      Page<MotorcadeVo> getMotorcadeVoPage(@Param("page") Page page, @Param("param")MotorcadeQueryParam motorcadeQueryParam);
+
+     MotorcadeVo getMotorcadeVo(@Param("id")Integer id);
 }
