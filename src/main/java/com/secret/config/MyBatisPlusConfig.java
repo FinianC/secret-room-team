@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.secret.model.vo.UserVerificationVo;
 import com.secret.model.vo.UserVo;
 import com.secret.utils.UserLoginUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +43,8 @@ public class MyBatisPlusConfig {
 	public static class MyMetaObjectHandler implements MetaObjectHandler {
 		@Override
 		public void insertFill(MetaObject metaObject) {
-			Object user = UserLoginUtils.getUserInfo().getUser();
-			Integer userId = null;
-			if(user instanceof UserVo){
-				UserVo userVo = (UserVo)user;
-				userId = userVo.getId();
-			}
+			Integer userId = getUserId();
+
 			log.info("start insert fill ....");
 			this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
 			this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
@@ -56,15 +53,23 @@ public class MyBatisPlusConfig {
 		}
 		@Override
 		public void updateFill(MetaObject metaObject) {
-			Object user = UserLoginUtils.getUserInfo().getUser();
-			Integer userId = null;
-			if(user instanceof UserVo){
-				UserVo userVo = (UserVo)user;
-				userId = userVo.getId();
-			}
+			Integer userId = getUserId();
 			log.info("start update fill ....");
 			this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
 			this.strictInsertFill(metaObject, "updateUser", Integer.class, userId);
+		}
+
+		public Integer  getUserId() {
+			UserVerificationVo userInfoIsNull = UserLoginUtils.getUserInfoIsNull();
+			if(userInfoIsNull == null ){
+				return 1;
+			}
+			Object user = userInfoIsNull.getUser();
+			if(user instanceof UserVo){
+				UserVo userVo = (UserVo)user;
+				return userVo.getId();
+			}
+			return 1;
 		}
 	}
 
