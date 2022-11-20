@@ -9,7 +9,7 @@ import lombok.Data;
 public class FileVo {
 
     @ApiModelProperty(value = "文件名称")
-    private String id;
+    private Integer id;
 
     @ApiModelProperty(value = "文件名称")
     private String name;
@@ -18,6 +18,6 @@ public class FileVo {
     private String url;
 
     @ApiModelProperty(value = "文件类型 1图片 2其他")
-    private String type;
+    private Integer type;
 
 }
