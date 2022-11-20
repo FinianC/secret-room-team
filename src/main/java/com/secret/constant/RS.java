@@ -34,6 +34,11 @@ public enum RS {
 	 * 用户名错误，请重新登陆。 PASS_WORD_ERROR
 	 */
 	USER_NAME_ERROR(1005, "用户名错误，请重新登陆。"),
+
+	UPLOAD_FOUNT(1006, "文件上传错误。"),
+
+	FILE_NOT_FOUNT(1007, "文件未找到。"),
+
 	/**
 	 * 系统错误 SYSTEM_ERROR
 	 */

@@ -1,24 +1,24 @@
 server:
   port: 9096
   servlet:
-    context-path: /api
+    context-path: /secret
 spring:
-  redirect_uri: http://xiaofei.omnrj.com/api
+  redirect_uri: https://secretescape.mynatapp.cc/secret/file/getFile/
   config:
     name: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://1.116.126.119:3306/jiamei_two_card?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
-    username: jiamei_two_card
-    password: jkiijffLyTxYJCPn
+    url: jdbc:mysql://127.0.0.1:3306/secret_room?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 1804123028
   servlet:
     multipart:
       max-file-size: 10GB
       max-request-size: 10GB
   redis:
-    host: 47.100.68.162
+    host: 127.0.0.1
     port: 6379
-    password: 2428865264
+    password: 1804123028
     timeout: 3000
 mybatis-plus:
   configuration:
@@ -30,5 +30,6 @@ mybatis-plus:
 wechat:
   appId: wx4be76fcc1ea24095
   appSecret: 5984430fae5c7add413ae8e114b8c983
-  openId:
-  isDebug: false
+file:
+  upload:
+    path: /home/finian/service/images

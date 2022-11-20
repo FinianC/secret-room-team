@@ -46,27 +46,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Value("{wechat.isDebug:false}")
-    private Boolean isDebug;
-
     @Value("{wechat.appId}")
     private String appId;
 
     @Value("{wechat.appSecret}")
     private String appSecret;
 
-    @Value("{wechat.openId}")
-    private String openId;
 
     @ApiOperation(value = "微信code登录", notes = "用户登录信息在header里面获取 token", httpMethod = "POST")
     @PostMapping("/getOpenId")
     public R<UserVerificationVo<UserVo>> getOpenId(@RequestBody UserGetOpenIdParam userGetOpenIdParam) {
-        JSONObject jsonObject = new JSONObject();
-        if (!isDebug) {
-            jsonObject = WechatUtil.getOpenid(appId, appSecret, userGetOpenIdParam.getCode());
-        } else {
-            jsonObject.put("openid", openId);
-        }
+        JSONObject jsonObject = WechatUtil.getOpenid(appId, appSecret, userGetOpenIdParam.getCode());
         String openId = jsonObject.getString("openid");
         if (StringUtils.isEmpty(openId)) {
             log.error("getOpenid error {}", JSONObject.toJSONString(jsonObject));

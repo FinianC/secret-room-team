@@ -41,19 +41,13 @@ public class CodeAutoGenerator {
 		String moduleName = "secret";
 //		String[] tableNamesToGenerate = scanner("表名，多个英文逗号分割").split(",");
 		 String[] tableNamesToGenerate = {
-				 "s_admin","s_motorcade"
-				 ,"s_joined_motorcade",
-				 "s_keyword_record",
-				 "s_wish_team",
-				 "s_fleet_type",
-				 "s_banner",
-				 "s_user","s_terror_level"
+				"s_file"
 		 };
 		// 代码生成器
 		AutoGenerator mpg = new AutoGenerator();
 
 		// 项目根目录
-		String projectPath = "E:\\idea_code\\card-voucher\\secretRoom";
+		String projectPath = "E:\\idea_code\\card-voucher\\secret-room-team";
 
 		//// 全局配置
 		GlobalConfig gc = new GlobalConfig();
