@@ -18,6 +18,8 @@ public enum RS {
 
 	SUCCESS(HttpStatus.OK.value(), "成功"),
 
+	LOGIN_SUCCESS(HttpStatus.OK.value(), "登入成功"),
+
 	/**
 	 * 用户未登录 LOGIN_FAIL
 	 */

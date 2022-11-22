@@ -60,10 +60,13 @@ public class R<T> implements Serializable {
 	}
 
 	public static R success(Object data){
+		return success(data,RS.SUCCESS);
+	}
+	public static R success(Object data,RS rs){
 		R r=new R();
 		r.data=data;
-		r.message= RS.SUCCESS.message();
-		r.code=RS.SUCCESS.status();
+		r.message=rs.message();
+		r.code=rs.status();
 		return r;
 	}
 	public static  R success(){

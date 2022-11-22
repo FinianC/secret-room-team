@@ -81,7 +81,7 @@ public class UserController {
             RedisUtils.set(token, userVerificationVo, 86400);
             RedisUtils.set(openId, token, 86400);
         }
-        return R.success(RedisUtils.get(token, UserVerificationVo.class));
+        return R.success(RedisUtils.get(token, UserVerificationVo.class),RS.LOGIN_SUCCESS);
     }
 
     @ApiOperation(value = "更新用户信息", httpMethod = "POST")
