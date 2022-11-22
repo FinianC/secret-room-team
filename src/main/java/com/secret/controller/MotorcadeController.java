@@ -9,7 +9,6 @@ import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.MotorcadeVo;
 import com.secret.model.vo.R;
-import com.secret.model.vo.UserVerificationVo;
 import com.secret.model.vo.UserVo;
 import com.secret.service.MotorcadeService;
 import com.secret.utils.TransferUtils;
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-11-13
  */
 @RestController
-@RequestMapping("/secret/motorcade")
+@RequestMapping("/motorcade")
 public class MotorcadeController {
 
     @Autowired

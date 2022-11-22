@@ -39,17 +39,17 @@ import java.math.BigDecimal;
  * @since 2022-11-13
  */
 @RestController
-@RequestMapping("/secret/user")
+@RequestMapping("/user")
 @Slf4j
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @Value("{wechat.appId}")
+    @Value("${wechat.appId}")
     private String appId;
 
-    @Value("{wechat.appSecret}")
+    @Value("${wechat.appSecret}")
     private String appSecret;
 
 
