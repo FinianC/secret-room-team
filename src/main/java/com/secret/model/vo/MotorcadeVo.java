@@ -23,8 +23,6 @@ public class MotorcadeVo {
     @ApiModelProperty(value = "价格")
     private BigDecimal price;
 
-    @ApiModelProperty(value = "主题")
-    private String theme;
 
     @ApiModelProperty(value = "恐怖等级")
     private Integer terrorLevel;
@@ -36,7 +34,7 @@ public class MotorcadeVo {
     private Integer typeId;
 
     @ApiModelProperty(value = "车队名称")
-    private Integer typeName;
+    private String typeName;
 
     @ApiModelProperty(value = "描述")
     private String description;

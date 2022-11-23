@@ -40,7 +40,7 @@ public class FleetTypeEntity implements Serializable {
     @ApiModelProperty(value = "删除状态 0未删除 1删除")
     @TableField("delete_state")
     @TableLogic
-    private String deleteState;
+    private Integer deleteState;
 
     @ApiModelProperty(value = "创建人")
     @TableField("create_user")

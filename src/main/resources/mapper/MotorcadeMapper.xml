@@ -6,7 +6,6 @@
         <id column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="price" property="price"/>
-        <result column="theme" property="theme"/>
         <result column="terror_level" property="terrorLevel"/>
         <result column="type_id" property="typeId"/>
         <result column="description" property="description"/>
@@ -36,7 +35,6 @@
         mt.id ,
         mt.title ,
         mt.price ,
-        mt.theme ,
         mt.terror_level  ,
         mt.type_id ,
         mt.description ,
@@ -113,8 +111,7 @@
                 and ft.id = param.typeId
             </if>
         </where>
-         mt.delete_state = 0
-
+         and mt.delete_state = 0
     </select>
     <select id="getMotorcadeVo" resultMap="motorcadeVo">
         SELECT
@@ -139,6 +136,6 @@
                 and ft.id = param.typeId
             </if>
         </where>
-        mt.delete_state = 0
+        and mt.delete_state = 0
     </select>
 </mapper>
