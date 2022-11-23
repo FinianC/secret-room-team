@@ -5,12 +5,18 @@ import com.secret.model.entity.MotorcadeEntity;
 import com.secret.mapper.MotorcadeMapper;
 import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
+import com.secret.model.vo.JoinedMotorcadeVo;
 import com.secret.model.vo.MotorcadeVo;
+import com.secret.model.vo.UserVerificationVo;
+import com.secret.model.vo.UserVo;
 import com.secret.service.MotorcadeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.secret.utils.UserLoginUtils;
 import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -34,8 +40,39 @@ public class MotorcadeServiceImpl extends ServiceImpl<MotorcadeMapper, Motorcade
 
     @Override
     public Page<MotorcadeVo> getMotorcadeVoPage(MotorcadeQueryParam motorcadeQueryParam) {
+        UserVerificationVo<UserVo> userInfoIsNull = UserLoginUtils.getUserInfoIsNull();
         Page page = new Page<>(motorcadeQueryParam.getCurrent(), motorcadeQueryParam.getPageSize());
         Page<MotorcadeVo> motorcadeVoPage = motorcadeMapper.getMotorcadeVoPage(page, motorcadeQueryParam);
+        List<MotorcadeVo> records = motorcadeVoPage.getRecords();
+        if(userInfoIsNull!=null){
+            UserVo user = userInfoIsNull.getUser();
+            records.forEach( re -> {
+                setJoin(user, re);
+            } );
+        }
+
         return motorcadeVoPage;
+    }
+
+    private void setJoin(UserVo user, MotorcadeVo re) {
+        List<JoinedMotorcadeVo> joinedMotorcadeVos = re.getJoinedMotorcadeVos();
+        joinedMotorcadeVos.forEach( join -> {
+           if( join.getUserId().equals(user.getId())){
+               re.setJoined(1);
+               return;
+           }
+        } );
+        if(re.getJoined() == null){
+            re.setJoined(0);
+        }
+    }
+
+    @Override
+    public MotorcadeVo getMotorcadeVo(Integer id) {
+        UserVo user =(UserVo)UserLoginUtils.getUserInfo().getUser();
+        MotorcadeVo motorcadeVo = motorcadeMapper.getMotorcadeVo(id);
+        setJoin(user, motorcadeVo);
+
+        return motorcadeVo;
     }
 }

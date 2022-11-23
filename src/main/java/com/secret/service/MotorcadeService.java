@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.MotorcadeVo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -20,5 +21,7 @@ public interface MotorcadeService extends IService<MotorcadeEntity> {
     MotorcadeVo getMotorcadeVoById(Integer id);
 
     Page<MotorcadeVo> getMotorcadeVoPage(MotorcadeQueryParam motorcadeQueryParam);
+
+    MotorcadeVo getMotorcadeVo(Integer id);
 
 }

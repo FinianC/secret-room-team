@@ -18,6 +18,8 @@ public enum RS {
 
 	SUCCESS(HttpStatus.OK.value(), "成功"),
 
+	LOGIN_SUCCESS(HttpStatus.OK.value(), "登入成功"),
+
 	/**
 	 * 用户未登录 LOGIN_FAIL
 	 */
@@ -34,6 +36,11 @@ public enum RS {
 	 * 用户名错误，请重新登陆。 PASS_WORD_ERROR
 	 */
 	USER_NAME_ERROR(1005, "用户名错误，请重新登陆。"),
+
+	UPLOAD_FOUNT(1006, "文件上传错误。"),
+
+	FILE_NOT_FOUNT(1007, "文件未找到。"),
+
 	/**
 	 * 系统错误 SYSTEM_ERROR
 	 */
@@ -41,7 +48,9 @@ public enum RS {
 
 	MENU_NOT_FOUNT(2002,"无权限访问。"),
 
-	NO_PUBLISHING_PERMISSION(2003,"无发布车队权限，有需要可找群主开通。")
+	NO_PUBLISHING_PERMISSION(2003,"无发布车队权限，有需要可找群主开通。"),
+
+	DO_NOT_JOIN_AGAIN(2004,"请勿重复加入。")
 	;
 
 	private final int status;

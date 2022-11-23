@@ -9,7 +9,6 @@ import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.MotorcadeVo;
 import com.secret.model.vo.R;
-import com.secret.model.vo.UserVerificationVo;
 import com.secret.model.vo.UserVo;
 import com.secret.service.MotorcadeService;
 import com.secret.utils.TransferUtils;
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-11-13
  */
 @RestController
-@RequestMapping("/secret/motorcade")
+@RequestMapping("/motorcade")
 public class MotorcadeController {
 
     @Autowired
@@ -49,7 +48,7 @@ public class MotorcadeController {
     }
 
     @ApiOperation(value = "删除车队信息")
-    @GetMapping("/user/delete/{id}")
+    @PostMapping("/user/delete/{id}")
     public R<Integer> delete(@PathVariable String id) {
         motorcadeService.removeById(id);
         return R.success(id);
@@ -66,9 +65,16 @@ public class MotorcadeController {
 
     @ApiOperation(value = "分页查询大厅车队信息", httpMethod = "POST")
     @PostMapping("/page")
-    public R<Page<MotorcadeVo>> updateInformation(@RequestBody MotorcadeQueryParam motorcadeQueryParam) {
+    public R<Page<MotorcadeVo>> page(@RequestBody MotorcadeQueryParam motorcadeQueryParam) {
         Page<MotorcadeVo> motorcadeVoPage = motorcadeService.getMotorcadeVoPage(motorcadeQueryParam);
         return R.success(motorcadeVoPage);
+    }
+
+    @ApiOperation(value = "车队详情", httpMethod = "GET")
+    @GetMapping("/detail/{id}")
+    public R<Page<MotorcadeVo>> detail( @PathVariable Integer id) {
+        MotorcadeVo motorcadeVo = motorcadeService.getMotorcadeVo(id);
+        return R.success(motorcadeVo);
     }
 
 }

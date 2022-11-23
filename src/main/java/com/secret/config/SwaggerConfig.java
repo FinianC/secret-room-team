@@ -37,7 +37,7 @@ public class SwaggerConfig {
 			log.debug("Swagger Doc has been disabled.");
 		}
 		return buildDocket("Default",
-				"com.card.controller",
+				"com.secret.controller",
 				"/**")
 				.enable(isDocEnable);
 	}

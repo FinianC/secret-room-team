@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +20,10 @@ public class MotorcadeVo {
     @ApiModelProperty(value = "标题")
     private String title;
 
+    @ApiModelProperty(value = "价格")
+    private BigDecimal price;
+
+
     @ApiModelProperty(value = "恐怖等级")
     private Integer terrorLevel;
 
@@ -29,7 +34,7 @@ public class MotorcadeVo {
     private Integer typeId;
 
     @ApiModelProperty(value = "车队名称")
-    private Integer typeName;
+    private String typeName;
 
     @ApiModelProperty(value = "描述")
     private String description;
@@ -63,6 +68,9 @@ public class MotorcadeVo {
 
     @ApiModelProperty(value = "头像")
     private String headerImg;
+
+    @ApiModelProperty(value = "是否加入 1加入 0未加入")
+    private Integer joined;
 
     @ApiModelProperty("车队内成员")
     private List<JoinedMotorcadeVo> joinedMotorcadeVos;

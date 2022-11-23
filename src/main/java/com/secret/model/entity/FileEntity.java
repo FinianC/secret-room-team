@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -15,17 +14,17 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 车队类型
+ * 
  * </p>
  *
  * @author chenDi
- * @since 2022-11-13
+ * @since 2022-11-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("s_fleet_type")
-@ApiModel(value="FleetTypeEntity对象", description="车队类型")
-public class FleetTypeEntity implements Serializable {
+@TableName("s_file")
+@ApiModel(value="FileEntity对象", description="")
+public class FileEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,30 +32,25 @@ public class FleetTypeEntity implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "类型名称")
-    @TableField("type_name")
-    private String typeName;
+    @ApiModelProperty(value = "名称")
+    @TableField("name")
+    private String name;
 
-    @ApiModelProperty(value = "删除状态 0未删除 1删除")
-    @TableField("delete_state")
-    @TableLogic
-    private Integer deleteState;
+    @ApiModelProperty(value = "url")
+    @TableField("url")
+    private String url;
 
-    @ApiModelProperty(value = "创建人")
-    @TableField("create_user")
-    private Integer createUser;
+    @ApiModelProperty(value = "类型 1图片")
+    @TableField("type")
+    private Integer type;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @ApiModelProperty(value = "更新人")
-    @TableField("update_user")
-    private Integer updateUser;
-
-    @ApiModelProperty(value = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+    @ApiModelProperty(value = "创建人")
+    @TableField("create_user")
+    private Integer createUser;
 
 
 }

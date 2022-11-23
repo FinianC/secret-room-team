@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @ApiModel("车队创建参数")
@@ -19,6 +20,12 @@ public class MotorcadeParam {
     @ApiModelProperty(value = "恐怖等级")
     @NotBlank
     private Integer terrorLevel;
+
+    @ApiModelProperty(value = "价格")
+    private BigDecimal price;
+
+    @ApiModelProperty(value = "主题")
+    private String theme;
 
     @ApiModelProperty(value = "车队类型 密室or剧本等等..")
     @NotBlank
