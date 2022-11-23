@@ -3,7 +3,7 @@ server:
   servlet:
     context-path: /secret
 spring:
-  redirect_uri: https://secretescape.mynatapp.cc/secret/file/getFile/
+  redirect_uri: https://3t549x3675.goho.co/secret/file/getFile/
   config:
     name: dev
   datasource:

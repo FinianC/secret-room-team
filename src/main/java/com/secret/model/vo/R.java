@@ -4,6 +4,9 @@ import com.secret.constant.RS;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.Serializable;
 
@@ -24,14 +27,22 @@ public class R<T> implements Serializable {
 	@ApiModelProperty("响应消息")
 	private String message;
 
+	@ApiModelProperty("域名前缀")
+	private String baseUrl;
+
 	@ApiModelProperty("响应数据")
 	private T data;
 
+	private static String redirect_url;
 
 	public R (int code, String message, T data) {
+		this.baseUrl=R.redirect_url;
 		this.code = code;
 		this.message = message;
 		this.data = data;
+	}
+	public R() {
+		this.baseUrl=R.redirect_url;
 	}
 
 	public R(int status, String message) {
@@ -56,9 +67,6 @@ public class R<T> implements Serializable {
 		r.code=code;
 		return r;
 	}
-	public R() {
-	}
-
 	public static R success(Object data){
 		return success(data,RS.SUCCESS);
 	}
@@ -74,5 +82,16 @@ public class R<T> implements Serializable {
 		r.message= RS.SUCCESS.message();
 		r.code=RS.SUCCESS.status();
 		return r;
+	}
+
+	@Configuration
+	public static class LifeCallInit implements InitializingBean {
+		@Value("${spring.redirect_uri}")
+		private String redirect_uri;
+		@Override
+		public void afterPropertiesSet() throws Exception {
+			redirect_url=redirect_uri;
+			System.out.println("执行方法：afterPropertiesSet:"+redirect_uri);
+		}
 	}
 }
