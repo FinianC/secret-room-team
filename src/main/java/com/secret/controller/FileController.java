@@ -10,21 +10,17 @@ import com.secret.utils.TransferUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.UUID;
 
 /**
@@ -42,10 +38,11 @@ public class FileController {
 
     @Value("${file.upload.path}")
     public String uploadPath;
+
     @Value("${spring.redirect_uri}")
     public String baseUrl;
 
-    @Autowired
+    @Resource
     private FileService fileService;
 
     @Resource
