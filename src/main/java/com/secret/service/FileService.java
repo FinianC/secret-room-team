@@ -2,6 +2,8 @@ package com.secret.service;
 
 import com.secret.model.entity.FileEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.secret.model.vo.R;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -12,5 +14,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-11-20
  */
 public interface FileService extends IService<FileEntity> {
+
+    /**
+     * 保存文件
+     * @param multipartFiles
+     * @return
+     */
+    R saveFile(MultipartFile[] multipartFiles);
 
 }

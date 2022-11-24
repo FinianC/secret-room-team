@@ -1,8 +1,11 @@
 package com.secret.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.constant.RS;
+import com.secret.enums.UserRoleEnum;
 import com.secret.model.entity.MotorcadeEntity;
 import com.secret.model.params.MotorcadeModifyParam;
 import com.secret.model.params.MotorcadeParam;
@@ -10,6 +13,7 @@ import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.MotorcadeVo;
 import com.secret.model.vo.R;
 import com.secret.model.vo.UserVo;
+import com.secret.service.FileService;
 import com.secret.service.MotorcadeService;
 import com.secret.utils.TransferUtils;
 import com.secret.utils.UserLoginUtils;
@@ -17,6 +21,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -33,11 +40,19 @@ public class MotorcadeController {
     @Autowired
     private MotorcadeService motorcadeService;
 
+    @Autowired
+    private FileService fileService;
+
     @ApiOperation(value = "发布车队信息", httpMethod = "POST")
     @PostMapping("/user/add")
-    public R<MotorcadeVo> updateInformation(@RequestBody MotorcadeParam motorcadeParam) {
+    public R<MotorcadeVo> updateInformation(@RequestParam MultipartFile[] multipartFiles, MotorcadeParam motorcadeParam) {
         UserVo user = (UserVo)UserLoginUtils.getUserInfo().getUser();
-        Assert.isTrue(user.getRole() == 2, RS.NO_PUBLISHING_PERMISSION.message());
+        Assert.isTrue(UserRoleEnum.RELEASE_GROUP.getCode() == user.getRole(), RS.NO_PUBLISHING_PERMISSION.message());
+        R<List<Integer>> r = fileService.saveFile(multipartFiles);
+        Assert.isTrue(r.getCode()==200,r.getMessage());
+        List<Integer> data = r.getData();
+        String pictures= JSONObject.toJSONString(data);
+        motorcadeParam.setPictures(pictures);
         MotorcadeEntity motorcadeEntity = new MotorcadeEntity();
         TransferUtils.transferBean(motorcadeParam,motorcadeEntity);
         motorcadeService.save(motorcadeEntity);
