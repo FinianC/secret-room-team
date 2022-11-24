@@ -22,11 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -95,6 +91,23 @@ public class UserController {
         UserEntity byId = userService.getById(userEntity.getId());
         TransferUtils.transferBean(byId,user);
         userInfo.setUser(user);
+        return R.success(userInfo);
+    }
+
+    @ApiOperation(value = "获取用户信息", httpMethod = "GET")
+    @GetMapping("/getUserInfo")
+    public R<UserVerificationVo<UserVo>> getUserInfo() {
+        UserVerificationVo<UserVo> userInfo = UserLoginUtils.getUserInfo();
+        return R.success(userInfo);
+    }
+
+    @ApiOperation(value = "刷新用户信息", httpMethod = "POST")
+    @PostMapping("/refreshUserInfo")
+    public R<UserVerificationVo<UserVo>> refreshUserInfo() {
+        UserVerificationVo<UserVo> userInfo = UserLoginUtils.getUserInfo();
+        UserVo user = userInfo.getUser();
+        UserEntity byId = userService.getById(user.getId());
+        TransferUtils.transferBean(byId,user);
         return R.success(userInfo);
     }
 
