@@ -1,4 +1,4 @@
-package com.secret.enums;
+package com.secret.model.enums;
 
 import lombok.Getter;
 
