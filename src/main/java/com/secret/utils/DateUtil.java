@@ -834,6 +834,13 @@ public class DateUtil {
         Date strtodate = formatter.parse(strDate, pos);
         return strtodate;
     }
+
+    public static String DateToStrNotSS(LocalDateTime localDateTime) {
+        // 时间格式转换
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd HH:mm");
+        String format = simpleDateFormat.format(localDateTime);
+        return format;
+    }
 }
 
 

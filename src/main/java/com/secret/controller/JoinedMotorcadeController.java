@@ -4,6 +4,8 @@ package com.secret.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.constant.RS;
+import com.secret.event.producer.FleetChangesEventPublisher;
+import com.secret.model.dto.FleetChangesEventMessage;
 import com.secret.model.entity.JoinedMotorcadeEntity;
 import com.secret.model.entity.MotorcadeEntity;
 import com.secret.model.params.JoinedMotorcadeParam;
@@ -38,6 +40,9 @@ public class JoinedMotorcadeController {
     @Autowired
     private JoinedMotorcadeService joinedMotorcadeService;
 
+    @Autowired
+    private FleetChangesEventPublisher fleetChangesEventPublisher;
+
 
     @ApiOperation(value = "加入车队", httpMethod = "POST")
     @PostMapping("/join")
@@ -58,6 +63,7 @@ public class JoinedMotorcadeController {
         int total = motorcadeEntity.getAlreadyExisting() + count;
         if(total >= motorcadeEntity.getClusteringNumber()){
             // todo 已成团
+            fleetChangesEventPublisher.publish(new FleetChangesEventMessage());
         }
         return R.success();
     }

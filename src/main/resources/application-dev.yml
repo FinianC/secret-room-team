@@ -30,6 +30,9 @@ mybatis-plus:
 wechat:
   appId: wx4be76fcc1ea24095
   appSecret: 5984430fae5c7add413ae8e114b8c983
+  successTemplateId: ww
+  cancelTemplateId: xx
+  failTemplateId: ss
 file:
   upload:
     path: E:\images
