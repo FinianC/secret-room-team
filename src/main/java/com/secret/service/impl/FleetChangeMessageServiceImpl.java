@@ -62,10 +62,6 @@ public class FleetChangeMessageServiceImpl extends ServiceImpl<FleetChangeMessag
             FleetChangeMessageEntity success = getFleetChangeMessage(type, userEntity, motorcadeVo);
             save(success);
             // todo 发送通知模板
-
-//            sendTemplateToUsers()
-
-
             return;
         }
         FleetChangeMessageEntity fleetChangeMessage = getFleetChangeMessage(type, userEntity, motorcadeVo);

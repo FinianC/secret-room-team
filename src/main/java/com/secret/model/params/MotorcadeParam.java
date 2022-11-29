@@ -18,7 +18,6 @@ public class MotorcadeParam {
     private String title;
 
     @ApiModelProperty(value = "恐怖等级")
-    @NotBlank
     private Integer terrorLevel;
 
     @ApiModelProperty(value = "价格")
@@ -43,15 +42,12 @@ public class MotorcadeParam {
 
 
     @ApiModelProperty(value = "最大拼团人数")
-    @NotBlank
     private Integer maximumNumber;
 
     @ApiModelProperty(value = "成团数")
-    @NotBlank
     private Integer clusteringNumber;
 
     @ApiModelProperty(value = "已有人数")
-    @NotBlank
     private Integer alreadyExisting;
 
 
