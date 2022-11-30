@@ -44,14 +44,9 @@ public class MotorcadeController {
 
     @ApiOperation(value = "发布车队信息", httpMethod = "POST")
     @PostMapping("/user/add")
-    public R<MotorcadeVo> updateInformation(@RequestParam MultipartFile[] multipartFiles, MotorcadeParam motorcadeParam) {
+    public R<MotorcadeVo> updateInformation(@RequestBody MotorcadeParam motorcadeParam) {
         UserVo user = (UserVo)UserLoginUtils.getUserInfo().getUser();
         Assert.isTrue(UserRoleEnum.RELEASE_GROUP.getCode() == user.getRole(), RS.NO_PUBLISHING_PERMISSION.message());
-        R<List<Integer>> r = fileService.saveFile(multipartFiles);
-        Assert.isTrue(r.getCode()==200,r.getMessage());
-        List<Integer> data = r.getData();
-        String pictures= JSONObject.toJSONString(data);
-        motorcadeParam.setPictures(pictures);
         MotorcadeEntity motorcadeEntity = new MotorcadeEntity();
         TransferUtils.transferBean(motorcadeParam,motorcadeEntity);
         motorcadeService.save(motorcadeEntity);
