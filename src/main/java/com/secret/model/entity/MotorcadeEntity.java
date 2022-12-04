@@ -68,6 +68,10 @@ public class MotorcadeEntity implements Serializable {
     @TableField("status")
     private Integer status;
 
+    @ApiModelProperty(value = "禁言 o未禁言 1禁言")
+    @TableField("banned")
+    private Integer banned;
+
     @ApiModelProperty(value = "删除状态 0未删除 1 删除")
     @TableField("delete_state")
     @TableLogic

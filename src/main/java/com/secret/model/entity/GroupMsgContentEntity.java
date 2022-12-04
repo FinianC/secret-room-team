@@ -15,17 +15,17 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 已加入的车队
+ * 群聊消息
  * </p>
  *
  * @author chenDi
- * @since 2022-11-13
+ * @since 2022-12-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("s_joined_motorcade")
-@ApiModel(value="JoinedMotorcadeEntity对象", description="已加入的车队")
-public class JoinedMotorcadeEntity implements Serializable {
+@TableName("s_group_msg_content")
+@ApiModel(value="GroupMsgContentEntity对象", description="群聊消息")
+public class GroupMsgContentEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,32 +35,40 @@ public class JoinedMotorcadeEntity implements Serializable {
 
     @ApiModelProperty(value = "车队id")
     @TableField("motorcade_id")
-    private Integer motorcadeId;
+    private String motorcadeId;
 
-    @ApiModelProperty(value = "用户id")
-    @TableField("user_id")
-    private Integer userId;
+    @ApiModelProperty(value = "发送者id")
+    @TableField("from_id")
+    private Integer fromId;
 
-    @ApiModelProperty(value = "第一个消息id")
-    @TableField("first_message_id")
-    private Integer firstMessageId;
+    @ApiModelProperty(value = "发送人昵称")
+    @TableField("from_name")
+    private String fromName;
 
-    @ApiModelProperty(value = "上一个消息id")
-    @TableField("last_message_id")
-    private Integer lastMessageId;
+    @ApiModelProperty(value = "发送人头像")
+    @TableField("from_profile")
+    private String fromProfile;
 
-    @ApiModelProperty(value = "删除状态 0未删除 1删除")
+    @ApiModelProperty(value = "更新人")
+    @TableField("content")
+    private String content;
+
+    @ApiModelProperty(value = "消息类型id")
+    @TableField("message_type_id")
+    private Integer messageTypeId;
+
+    @ApiModelProperty(value = "删除状态")
     @TableField("delete_state")
     @TableLogic
     private Integer deleteState;
 
-    @ApiModelProperty(value = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
     @ApiModelProperty(value = "创建人")
     @TableField("create_user")
     private Integer createUser;
+
+    @ApiModelProperty(value = "创建时间")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
     @ApiModelProperty(value = "更新人")
     @TableField("update_user")
