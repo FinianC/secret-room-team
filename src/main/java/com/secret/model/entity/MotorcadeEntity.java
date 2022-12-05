@@ -43,6 +43,9 @@ public class MotorcadeEntity implements Serializable {
     @TableField("price")
     private BigDecimal price;
 
+    @ApiModelProperty(value = "用户id")
+    @TableField("user_id")
+    private Integer userId;
 
     @ApiModelProperty(value = "恐怖等级")
     @TableField("terror_level")

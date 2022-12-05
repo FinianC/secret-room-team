@@ -36,3 +36,6 @@ wechat:
 file:
   upload:
     path: E:\images
+ws:
+  allowedOrigins: *
+  endpoint: /ws/secret

@@ -49,6 +49,7 @@ public class MotorcadeController {
         Assert.isTrue(UserRoleEnum.RELEASE_GROUP.getCode() == user.getRole(), RS.NO_PUBLISHING_PERMISSION.message());
         MotorcadeEntity motorcadeEntity = new MotorcadeEntity();
         TransferUtils.transferBean(motorcadeParam,motorcadeEntity);
+        motorcadeEntity.setUserId(user.getId());
         motorcadeService.save(motorcadeEntity);
         MotorcadeEntity byId = motorcadeService.getById(motorcadeEntity.getId());
         MotorcadeVo motorcadeVo = new MotorcadeVo();

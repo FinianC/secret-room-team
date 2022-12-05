@@ -17,6 +17,14 @@ public class DateUtil {
 
 
     /**
+     * 当前时间
+     * @return
+     */
+    public static LocalDateTime now() {
+        return LocalDateTime.now();
+    }
+
+    /**
      * 获取给定日期的前一天时间
      *
      * @param date

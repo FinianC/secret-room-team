@@ -35,7 +35,7 @@ public class GroupMsgContentEntity implements Serializable {
 
     @ApiModelProperty(value = "车队id")
     @TableField("motorcade_id")
-    private String motorcadeId;
+    private Integer motorcadeId;
 
     @ApiModelProperty(value = "发送者id")
     @TableField("from_id")

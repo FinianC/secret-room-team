@@ -4,6 +4,7 @@ import com.secret.model.entity.GroupMsgContentEntity;
 import com.secret.mapper.GroupMsgContentMapper;
 import com.secret.service.GroupMsgContentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +18,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class GroupMsgContentServiceImpl extends ServiceImpl<GroupMsgContentMapper, GroupMsgContentEntity> implements GroupMsgContentService {
 
+
+    @Autowired
+    private GroupMsgContentMapper groupMsgContentMapper;
+
+
+    @Override
+    public Integer getMaxIdByMotorcadeId(Integer motorcadeId) {
+        Integer maxIdByMotorcadeId = groupMsgContentMapper.getMaxIdByMotorcadeId(motorcadeId);
+        if(maxIdByMotorcadeId==null){
+            maxIdByMotorcadeId =0;
+        }
+        return maxIdByMotorcadeId;
+    }
 }

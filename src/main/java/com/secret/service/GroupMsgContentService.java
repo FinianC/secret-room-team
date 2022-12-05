@@ -1,7 +1,9 @@
 package com.secret.service;
 
+import com.secret.mapper.GroupMsgContentMapper;
 import com.secret.model.entity.GroupMsgContentEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>
@@ -12,5 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-04
  */
 public interface GroupMsgContentService extends IService<GroupMsgContentEntity> {
+
+   Integer getMaxIdByMotorcadeId(Integer motorcadeId);
 
 }
