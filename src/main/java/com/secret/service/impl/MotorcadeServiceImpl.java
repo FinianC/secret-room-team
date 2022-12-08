@@ -5,10 +5,7 @@ import com.secret.model.entity.MotorcadeEntity;
 import com.secret.mapper.MotorcadeMapper;
 import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
-import com.secret.model.vo.JoinedMotorcadeVo;
-import com.secret.model.vo.MotorcadeVo;
-import com.secret.model.vo.UserVerificationVo;
-import com.secret.model.vo.UserVo;
+import com.secret.model.vo.*;
 import com.secret.service.MotorcadeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.secret.utils.UserLoginUtils;
@@ -74,5 +71,19 @@ public class MotorcadeServiceImpl extends ServiceImpl<MotorcadeMapper, Motorcade
         setJoin(user, motorcadeVo);
 
         return motorcadeVo;
+    }
+
+    /**
+     * 获取聊天列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ChatListVo> getChatListVo(Integer userId) {
+
+
+
+        return null;
     }
 }

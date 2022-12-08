@@ -5,8 +5,11 @@ import com.secret.model.entity.MotorcadeEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
+import com.secret.model.vo.ChatListVo;
 import com.secret.model.vo.MotorcadeVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,5 +26,12 @@ public interface MotorcadeService extends IService<MotorcadeEntity> {
     Page<MotorcadeVo> getMotorcadeVoPage(MotorcadeQueryParam motorcadeQueryParam);
 
     MotorcadeVo getMotorcadeVo(Integer id);
+
+    /**
+     * 获取聊天列表
+     * @param userId
+     * @return
+     */
+    List<ChatListVo> getChatListVo(Integer userId);
 
 }

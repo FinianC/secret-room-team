@@ -15,17 +15,17 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 已加入的车队
+ * 
  * </p>
  *
  * @author chenDi
- * @since 2022-11-13
+ * @since 2022-12-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("s_joined_motorcade")
-@ApiModel(value="JoinedMotorcadeEntity对象", description="已加入的车队")
-public class JoinedMotorcadeEntity implements Serializable {
+@TableName("s_group_chat")
+@ApiModel(value="GroupChatEntity对象", description="")
+public class GroupChatEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,15 +33,23 @@ public class JoinedMotorcadeEntity implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    @ApiModelProperty(value = "群名")
+    @TableField("group_name")
+    private String groupName;
+
+    @ApiModelProperty(value = "群头像")
+    @TableField("group_head_img")
+    private String groupHeadImg;
+
     @ApiModelProperty(value = "车队id")
     @TableField("motorcade_id")
     private Integer motorcadeId;
 
-    @ApiModelProperty(value = "用户id")
-    @TableField("user_id")
-    private Integer userId;
+    @ApiModelProperty(value = "0未禁言 1禁言")
+    @TableField("banned")
+    private Integer banned;
 
-    @ApiModelProperty(value = "删除状态 0未删除 1删除")
+    @ApiModelProperty(value = "删除 1删除 ")
     @TableField("delete_state")
     @TableLogic
     private Integer deleteState;
@@ -52,15 +60,15 @@ public class JoinedMotorcadeEntity implements Serializable {
 
     @ApiModelProperty(value = "创建人")
     @TableField("create_user")
-    private Integer createUser;
+    private String createUser;
 
-    @ApiModelProperty(value = "更新人")
-    @TableField("update_user")
-    private Integer updateUser;
-
-    @ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value = "修改时间")
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    @ApiModelProperty(value = "修改人")
+    @TableField("update_user")
+    private String updateUser;
 
 
 }

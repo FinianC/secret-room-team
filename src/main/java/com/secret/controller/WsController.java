@@ -6,12 +6,15 @@ import com.github.binarywang.java.emoji.EmojiConverter;
 import com.secret.constant.RS;
 import com.secret.model.entity.GroupMsgContentEntity;
 import com.secret.model.entity.MotorcadeEntity;
+import com.secret.model.enums.ChatListCommandEnum;
 import com.secret.model.enums.GroupMessageEnum;
+import com.secret.model.params.ChatListParam;
 import com.secret.model.params.GroupMsgContentParam;
 import com.secret.model.vo.GroupMessageVo;
 import com.secret.model.vo.GroupMsgContentVo;
 import com.secret.model.vo.UserVo;
 import com.secret.service.GroupMsgContentService;
+import com.secret.service.JoinedMotorcadeService;
 import com.secret.service.MotorcadeService;
 import com.secret.utils.DateUtil;
 import com.secret.utils.TransferUtils;
@@ -46,6 +49,11 @@ public class WsController {
 
     @Autowired
     GroupMsgContentService groupMsgContentService;
+
+    @Autowired
+    private JoinedMotorcadeService joinedMotorcadeService;
+
+
     EmojiConverter emojiConverter = EmojiConverter.getInstance();
 
     SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -53,39 +61,43 @@ public class WsController {
      * 群聊的消息接受与转发
      * @param groupMsgContent
      */
-    @MessageMapping("/ws/{motorcadeId}")
-    public void handleGroupMessage(@PathVariable Integer motorcadeId , GroupMsgContentParam groupMsgContent){
-      UserVo user = (UserVo) UserLoginUtils.getUserInfo().getUser();
-      MotorcadeEntity motorcadeEntity = motorcadeService.getOne(new LambdaQueryWrapper<MotorcadeEntity>().select(MotorcadeEntity::getId).eq(MotorcadeEntity::getId,motorcadeId));
-      Assert.notNull(motorcadeEntity, RS.GROUP_CHAT_NOT_EXIST.message());
-      //处理emoji内容,转换成unicode编码
-      groupMsgContent.setContent(emojiConverter.toHtml(groupMsgContent.getContent()));
-      GroupMsgContentEntity groupMsgContentEntity = new GroupMsgContentEntity();
-      TransferUtils.transferBean(groupMsgContent,groupMsgContentEntity);
-      //保证来源正确性，从Security中获取用户信息
-      groupMsgContentEntity.setFromId(user.getId());
-      groupMsgContentEntity.setFromName(user.getNickname());
-      groupMsgContentEntity.setFromProfile(user.getHeaderImg());
-      groupMsgContentEntity.setCreateTime(DateUtil.now());
-      groupMsgContentEntity.setMotorcadeId(motorcadeId);
-      //保存该条群聊消息记录到数据库中
-      groupMsgContentService.save(groupMsgContentEntity);
-      // 封装新消息
-        GroupMsgContentVo groupMsgContentVo = new GroupMsgContentVo();
-        TransferUtils.transferBean(groupMsgContentEntity,groupMsgContentVo);
-        GroupMessageVo<GroupMsgContentVo> groupMessageVo = new GroupMessageVo();
-        groupMessageVo.setType(GroupMessageEnum.NEW.getCode());
-        groupMessageVo.setGroupMsgContentVo(groupMsgContentVo);
-        //转发该条数据
-      simpMessagingTemplate.convertAndSend("/topic/"+motorcadeId,groupMessageVo);
-    }
+//    @MessageMapping("/ws/{groupId}")
+//    public void handleGroupMessage(@PathVariable Integer groupId , GroupMsgContentParam groupMsgContent){
+//      UserVo user = (UserVo) UserLoginUtils.getUserInfo().getUser();
+//      MotorcadeEntity motorcadeEntity = motorcadeService.getOne(new LambdaQueryWrapper<MotorcadeEntity>().select(MotorcadeEntity::getId).eq(MotorcadeEntity::getId,motorcadeId));
+//      Assert.notNull(motorcadeEntity, RS.GROUP_CHAT_NOT_EXIST.message());
+//      //处理emoji内容,转换成unicode编码
+//      groupMsgContent.setContent(emojiConverter.toHtml(groupMsgContent.getContent()));
+//      GroupMsgContentEntity groupMsgContentEntity = new GroupMsgContentEntity();
+//      TransferUtils.transferBean(groupMsgContent,groupMsgContentEntity);
+//
+//      groupMsgContentEntity.setFromId(user.getId());
+//      groupMsgContentEntity.setFromName(user.getNickname());
+//      groupMsgContentEntity.setFromProfile(user.getHeaderImg());
+//      groupMsgContentEntity.setCreateTime(DateUtil.now());
+//      groupMsgContentEntity.setMotorcadeId(motorcadeId);
+//      //保存该条群聊消息记录到数据库中
+//      groupMsgContentService.save(groupMsgContentEntity);
+//      // 封装新消息
+//        GroupMsgContentVo groupMsgContentVo = new GroupMsgContentVo();
+//        TransferUtils.transferBean(groupMsgContentEntity,groupMsgContentVo);
+//        GroupMessageVo<GroupMsgContentVo> groupMessageVo = new GroupMessageVo();
+//        groupMessageVo.setType(GroupMessageEnum.NEW.getCode());
+//        groupMessageVo.setGroupMsgContentVo(groupMsgContentVo);
+//        //转发该条数据
+//      simpMessagingTemplate.convertAndSend("/topic/"+motorcadeId,groupMessageVo);
+//    }
 
 //  /**
 //   * 获取聊天列表
 //   */
-//  @MessageMapping("/ws/getChatBox")
-//  public void getChatBox(){
+//  @MessageMapping("/ws/getChatList")
+//  public void getChatList(@PathVariable Integer userId, ChatListParam chatListParam){
 //    UserVo user = (UserVo) UserLoginUtils.getUserInfo().getUser();
+//    if(ChatListCommandEnum.GET_ALL_CHAT_LIST.getCode().equals(chatListParam.getCommand())){
+//        joinedMotorcadeService.list(new LambdaQueryWrapper<>())
+//    }
+//
 //
 //    //转发该条数据
 //    simpMessagingTemplate.convertAndSend("/topic/"+motorcadeId,groupMsgContent);

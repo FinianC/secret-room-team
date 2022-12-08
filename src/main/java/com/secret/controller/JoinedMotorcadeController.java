@@ -64,7 +64,6 @@ public class JoinedMotorcadeController {
         // 获取加入时收到的第一次消息id
         Integer maxIdByMotorcadeId = groupMsgContentService.getMaxIdByMotorcadeId(joinedMotorcadeParam.getMotorcadeId());
         joinedMotorcadeEntity = new JoinedMotorcadeEntity();
-        joinedMotorcadeEntity.setFirstMessageId(maxIdByMotorcadeId);
         joinedMotorcadeEntity.setMotorcadeId(joinedMotorcadeParam.getMotorcadeId());
         joinedMotorcadeEntity.setUserId(user.getId());
         joinedMotorcadeService.save(joinedMotorcadeEntity);

@@ -41,7 +41,7 @@ public class CodeAutoGenerator {
 		String moduleName = "secret";
 //		String[] tableNamesToGenerate = scanner("表名，多个英文逗号分割").split(",");
 		 String[] tableNamesToGenerate = {
-				"s_message_type","s_group_msg_content","s_fleet_change_message"
+				"s_message_type","s_group_msg_content","s_fleet_change_message","s_group_chat_member","s_group_chat"
 		 };
 		// 代码生成器
 		AutoGenerator mpg = new AutoGenerator();

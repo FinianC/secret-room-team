@@ -33,23 +33,15 @@ public class GroupMsgContentEntity implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "车队id")
-    @TableField("motorcade_id")
-    private Integer motorcadeId;
+    @ApiModelProperty(value = "群组id")
+    @TableField("group_id")
+    private Integer groupId;
 
     @ApiModelProperty(value = "发送者id")
-    @TableField("from_id")
-    private Integer fromId;
+    @TableField("member_id")
+    private Integer memberId;
 
-    @ApiModelProperty(value = "发送人昵称")
-    @TableField("from_name")
-    private String fromName;
-
-    @ApiModelProperty(value = "发送人头像")
-    @TableField("from_profile")
-    private String fromProfile;
-
-    @ApiModelProperty(value = "更新人")
+    @ApiModelProperty(value = "内容")
     @TableField("content")
     private String content;
 
