@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @date 2021-05-01
  */
 @EnableScheduling
-@ConfigurationPropertiesScan("com.secret.config.properties")
+//@ConfigurationPropertiesScan("com.secret.config.properties")
 @SpringBootApplication
 public class app {
 

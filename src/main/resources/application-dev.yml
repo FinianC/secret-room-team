@@ -26,7 +26,7 @@ mybatis-plus:
     default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
   mapper-locations:
     - classpath:mapper/*.xml
-
+#logging.config: classpath:log4j2-spring.xml
 wechat:
   appId: wx4be76fcc1ea24095
   appSecret: 5984430fae5c7add413ae8e114b8c983
@@ -37,5 +37,5 @@ file:
   upload:
     path: E:\images
 ws:
-  allowedOrigins: *
+#  allowedOrigins: *
   endpoint: /ws/secret
