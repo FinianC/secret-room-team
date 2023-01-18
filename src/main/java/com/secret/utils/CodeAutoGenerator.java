@@ -41,7 +41,7 @@ public class CodeAutoGenerator {
 		String moduleName = "secret";
 //		String[] tableNamesToGenerate = scanner("表名，多个英文逗号分割").split(",");
 		 String[] tableNamesToGenerate = {
-				"s_message_type","s_group_msg_content","s_fleet_change_message","s_group_chat_member","s_group_chat"
+				"s_theme"
 		 };
 		// 代码生成器
 		AutoGenerator mpg = new AutoGenerator();
@@ -70,7 +70,7 @@ public class CodeAutoGenerator {
 		DataSourceConfig dsc = new DataSourceConfig();
 		dsc.setDbType(DbType.MYSQL)
 				.setDriverName("com.mysql.cj.jdbc.Driver")
-				.setUrl("jdbc:mysql://192.168.0.102:3306/secret_room?useSSL=true&useUnicode=true"
+				.setUrl("jdbc:mysql://127.0.0.1:3306/secret_room?useSSL=false&useUnicode=true"
 						+ "&characterEncoding=UTF8&serverTimezone=Asia/Shanghai")
 				.setUsername("root")
 				.setPassword("1804123028");

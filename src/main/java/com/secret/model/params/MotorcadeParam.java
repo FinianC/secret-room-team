@@ -24,7 +24,7 @@ public class MotorcadeParam {
     private BigDecimal price;
 
     @ApiModelProperty(value = "主题")
-    private String theme;
+    private Integer themeId;
 
     @ApiModelProperty(value = "车队类型 密室or剧本等等..")
     @NotBlank

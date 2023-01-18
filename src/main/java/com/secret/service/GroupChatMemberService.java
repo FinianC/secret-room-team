@@ -13,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface GroupChatMemberService extends IService<GroupChatMemberEntity> {
 
+    /**
+     * 是群成员
+     * @param chatId
+     * @return
+     */
+    Boolean isGroupMember(Integer userId,Integer chatId);
+
 }

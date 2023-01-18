@@ -2,6 +2,9 @@ package com.secret.service;
 
 import com.secret.model.entity.GroupChatEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.secret.model.vo.ChatListVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface GroupChatService extends IService<GroupChatEntity> {
 
+    /**
+     * 根据用户id 获取聊天
+     * @param userId
+     * @return
+     */
+    List<ChatListVo> getChatByUserId(Integer userId);
 }

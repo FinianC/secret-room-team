@@ -2,7 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secret.mapper.GroupMsgContentMapper">
 
+    <resultMap id="groupMsgContentVo" type="com.secret.model.vo.GroupMsgContentVo">
+        <id property="id" column="id" />
+        <result property="motorcadeId" column="motorcade_id"/>
+        <result property="fromId" column="member_id"/>
+        <result property="userId" column="u_id"/>
+        <result property="fromName" column="nickanem"/>
+        <result property="fromProfile" column="header_img"/>
+        <result property="content" column="content"/>
+        <result property="messageTypeId" column="message_type_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="gmc">
+        gmc.id ,
+        gmc.group_id ,
+        gmc.content ,
+        gmc.message_type_id ,
+        gmc.member_id ,
+        gmc.create_time
+    </sql>
+
+    <sql id="gcm">
+        gcm.user_id
+    </sql>
+
+    <sql id="u">
+        u.id as u_id ,
+        u.nickanem ,
+        u.header_img
+    </sql>
+
+    <sql id="gc">
+        gc.motorcade_id
+    </sql>
+
     <select id="getMaxIdByMotorcadeId" resultType="java.lang.Integer">
-        select max(gmc.id) from s_group_msg_content gmc where gmc.motorcade_id = #{motorcadeId}
+        select max(gmc.id) from s_group_msg_content gmc where gmc.group_id  = #{groupId} and delete_state  =0
+    </select>
+    <select id="getUnreadTotal" resultType="java.lang.Integer">
+        select COUNT(gmc.id) from  s_group_msg_content gmc where gmc &gt; #{lastMessageId} and gmc.group_id = #{chatId} and delete_state  =0
+    </select>
+    <select id="pageByChatId" resultMap="groupMsgContentVo">
+
+       SELECT
+            <include refid="gmc"/> , <include refid="u"/> , <include refid="gc"/>
+        FROM
+            s_group_msg_content gmc
+            JOIN s_group_chat_member gcm ON gcm.id =  gmc.member_id
+            join s_user u on u.id = gcm.user_id
+            join s_group_chat gc on gc.id = gcm.group_id
+        WHERE
+            gmc.group_id = #{chatId}
+            AND gmc.delete_state = 0 and gcm.delete_state =0
     </select>
 </mapper>

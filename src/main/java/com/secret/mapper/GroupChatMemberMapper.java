@@ -2,6 +2,7 @@ package com.secret.mapper;
 
 import com.secret.model.entity.GroupChatMemberEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface GroupChatMemberMapper extends BaseMapper<GroupChatMemberEntity> {
 
+
+
+    Integer isGroupMember(@Param("userId") Integer userId, @Param("chatId") Integer chatId);
 }

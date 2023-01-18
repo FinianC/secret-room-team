@@ -41,6 +41,10 @@ public class GroupChatMemberEntity implements Serializable {
     @TableField(" is_group_leader")
     private Integer  isGroupLeader;
 
+    @ApiModelProperty(value = "群id")
+    @TableField("group_id")
+    private Integer groupId;
+
     @ApiModelProperty(value = "第一次进入群聊消息")
     @TableField("first_message_id")
     private Integer firstMessageId;

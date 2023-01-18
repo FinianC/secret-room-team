@@ -51,6 +51,10 @@ public class MotorcadeEntity implements Serializable {
     @TableField("terror_level")
     private Integer terrorLevel;
 
+    @ApiModelProperty(value = "主题")
+    @TableField("theme_id")
+    private Integer themeId;
+
     @ApiModelProperty(value = "车队类型 密室or剧本等等..")
     @TableField("type_id")
     private Integer typeId;

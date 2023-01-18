@@ -20,6 +20,9 @@ public class GroupMsgContentVo {
     @ApiModelProperty(value = "发送者id")
     private Integer fromId;
 
+    @ApiModelProperty(value = "用户id")
+    private Integer userId;
+
     @ApiModelProperty(value = "发送人昵称")
     private String fromName;
 

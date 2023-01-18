@@ -21,7 +21,7 @@ public enum GroupMessageEnum {
     public static String getMessage(String code) {
 
         for (GroupMessageEnum var : GroupMessageEnum.values()) {
-            if (code == var.getCode())
+            if (code.equals(var.getCode()) )
                 return var.getMessage();
         }
         return "";

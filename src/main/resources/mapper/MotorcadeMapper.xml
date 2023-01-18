@@ -21,6 +21,8 @@
         <result column="terror_level_name" property="terrorLevelName"/>
         <result column="nickname" property="nickname"/>
         <result column="header_img" property="headerImg"/>
+        <result column="theme_id" property="themeId"/>
+        <result column="theme_name" property="themeName"/>
         <collection property="joinedMotorcadeVos" ofType="com.secret.model.vo.JoinedMotorcadeVo">
             <id column="jmt_id" property="id"/>
             <result column="motorcade_id" property="motorcadeId"/>
@@ -70,6 +72,11 @@
         u2.header_img as u2_header_img
     </sql>
 
+    <sql id="t">
+        t.id as theme_id,
+        t.name as theme_name
+    </sql>
+
     <select id="getMotorcadeVoById" resultMap="motorcadeVo">
         SELECT
             <include refid="mt"/>
@@ -78,11 +85,13 @@
             ,<include refid="u"/>
             ,<include refid="jmt"/>
             ,<include refid="u2"/>
+            ,<include refid="t" />
         FROM
             s_motorcade mt
             LEFT JOIN s_user u ON mt.create_user = u.id
             LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
             LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
+            LEFT JOIN s_theme t ON t.id = mt.theme_id
             LEFT JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
             LEFT JOIN s_user u2 on jmt.user_id = u2.id
         WHERE
@@ -96,11 +105,13 @@
         ,<include refid="u"/>
         ,<include refid="jmt"/>
         ,<include refid="u2"/>
+        ,<include refid="t" />
         FROM
         s_motorcade mt
         LEFT JOIN s_user u ON mt.create_user = u.id
         LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
         LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
+        LEFT JOIN s_theme t ON t.id = mt.theme_id
         LEFT JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
         LEFT JOIN s_user u2 on jmt.user_id = u2.id
         <where>
@@ -121,11 +132,13 @@
         ,<include refid="u"/>
         ,<include refid="jmt"/>
         ,<include refid="u2"/>
+        ,<include refid="t" />
         FROM
         s_motorcade mt
         LEFT JOIN s_user u ON mt.create_user = u.id
         LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
         LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
+        LEFT JOIN s_theme t ON t.id = mt.theme_id
         LEFT JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
         LEFT JOIN s_user u2 on jmt.user_id = u2.id
         <where>

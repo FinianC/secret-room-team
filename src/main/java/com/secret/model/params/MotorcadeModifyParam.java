@@ -23,6 +23,9 @@ public class MotorcadeModifyParam {
     @ApiModelProperty(value = "恐怖等级")
     private Integer terrorLevel;
 
+    @ApiModelProperty(value = "主题id")
+    private Integer themeId;
+
     @ApiModelProperty(value = "车队类型 密室or剧本等等..")
     private Integer typeId;
 
