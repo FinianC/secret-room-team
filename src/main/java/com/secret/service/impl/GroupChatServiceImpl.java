@@ -1,17 +1,27 @@
 package com.secret.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.secret.config.FileConfig;
 import com.secret.model.dto.ChatListDto;
 import com.secret.model.entity.GroupChatEntity;
 import com.secret.mapper.GroupChatMapper;
+import com.secret.model.entity.GroupChatMemberEntity;
+import com.secret.model.entity.MotorcadeEntity;
 import com.secret.model.enums.UnreadMessageEnum;
 import com.secret.model.vo.ChatListVo;
+import com.secret.service.GroupChatMemberService;
 import com.secret.service.GroupChatService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.secret.service.GroupMsgContentService;
+import com.secret.utils.ImageUtil;
 import com.secret.utils.TransferUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,19 +33,26 @@ import java.util.List;
  * @since 2022-12-08
  */
 @Service
+@Slf4j
 public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChatEntity> implements GroupChatService {
 
-    @Autowired
+    @Resource
     private  GroupChatMapper groupChatMapper;
 
-    @Autowired
+    @Resource
     private GroupMsgContentService groupMsgContentService;
+
+    @Resource
+    private GroupChatMemberService groupChatMemberService;
+
+    @Resource
+    private FileConfig fileConfig;
 
     /**
      * 根据用户id 获取聊天
      *
      * @param userId
-     * @return
+     * @return list
      */
     @Override
     public List<ChatListVo> getChatByUserId(Integer userId) {
@@ -50,7 +67,43 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
                 chatListDto.setUnreadMessage(UnreadMessageEnum.EMPTY.getCode());
             }
         } );
-         List<ChatListVo> chatListVos = TransferUtils.transferList(chatByUserId, ChatListVo.class);
-        return chatListVos;
+        return TransferUtils.transferList(chatByUserId, ChatListVo.class);
+    }
+    /**
+     * 创建聊天室
+     *
+     * @param motorcadeEntity
+     * @return
+     */
+    @Override
+    public GroupChatEntity createGroupChat(MotorcadeEntity motorcadeEntity) {
+        GroupChatEntity groupChatEntity = new GroupChatEntity();
+        groupChatEntity.setGroupName(motorcadeEntity.getTitle());
+        groupChatEntity.setMotorcadeId(motorcadeEntity.getId());
+        save(groupChatEntity);
+        return groupChatEntity;
+    }
+
+    /**
+     * 更改头像
+     *
+     * @param chatId
+     * @return
+     */
+    @Override
+    public Boolean changeHeadPortrait(Integer chatId) {
+        List<String> memberHeadPortrait = groupChatMemberService.getMemberHeadPortrait(chatId);
+        String fileName = "GP-" + chatId+".jpg";
+        try {
+            boolean combinationOfhead = ImageUtil.getCombinationOfhead(memberHeadPortrait, fileConfig.getFileUrl(),fileName);
+            if(combinationOfhead){
+                boolean update = this.update(new LambdaUpdateWrapper<GroupChatEntity>().set(GroupChatEntity::getGroupHeadImg, fileName).eq(GroupChatEntity::getId, chatId));
+                return update;
+            }
+            log.error("failed to generate avatar ,chat id {}",chatId);
+        }catch (IOException e){
+            log.error("error failed to generate avatar ,chat id {}",chatId,e);
+        }
+        return Boolean.FALSE;
     }
 }

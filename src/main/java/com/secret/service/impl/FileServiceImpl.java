@@ -1,5 +1,6 @@
 package com.secret.service.impl;
 
+import com.secret.config.FileConfig;
 import com.secret.constant.RS;
 import com.secret.model.entity.FileEntity;
 import com.secret.mapper.FileMapper;
@@ -8,6 +9,9 @@ import com.secret.model.vo.R;
 import com.secret.service.FileService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.secret.utils.TransferUtils;
+import io.swagger.annotations.Api;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,10 +31,13 @@ import java.util.UUID;
  * @since 2022-11-20
  */
 @Service
+@Getter
 public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> implements FileService {
 
-    @Value("${file.upload.path}")
-    public String uploadPath;
+     @Autowired
+     private FileConfig fileConfig;
+
+
 
     /**
      * 保存文件
@@ -41,7 +48,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
     @Override
     public R<List<Integer>> saveFile(MultipartFile[] multipartFiles) {
         // 如果目录不存在则创建
-        File uploadDir = new File(uploadPath);
+        File uploadDir = new File(fileConfig.getFileUrl());
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
@@ -51,7 +58,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileEntity> impleme
             String suffixName = OriginalFilename.substring(OriginalFilename.lastIndexOf("."));//获取文件后缀名
             //重新随机生成名字
             String filename = UUID.randomUUID().toString() + suffixName;
-            File localFile = new File(uploadPath + "/" + filename);
+            File localFile = new File(fileConfig.getFileUrl() + "/" + filename);
             try {
                 file.transferTo(localFile); //把上传的文件保存至本地
                 FileEntity fileEntity = new FileEntity();

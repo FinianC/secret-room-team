@@ -17,6 +17,7 @@ import com.secret.model.vo.UserVo;
 import com.secret.service.*;
 import com.secret.utils.UserLoginUtils;
 import com.secret.utils.UserUtils;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-11-13
  */
 @RestController
+@Api("加入车队前端控制器")
 @RequestMapping("/user/joinedMotorcade")
 public class JoinedMotorcadeController {
 
@@ -59,8 +61,10 @@ public class JoinedMotorcadeController {
     @PostMapping("/join")
     @Transactional
     public R join(@RequestBody JoinedMotorcadeParam joinedMotorcadeParam) {
-
         UserVo user =(UserVo) UserLoginUtils.getUserInfo().getUser();
+        // check
+        MotorcadeEntity motorcadeEntity = motorcadeService.getById(joinedMotorcadeParam.getMotorcadeId());
+        Assert.notNull(motorcadeEntity, RS.FLEET_DOES_NOT_EXIST.message());
         JoinedMotorcadeEntity joinedMotorcadeEntity = joinedMotorcadeService.getOne(new LambdaQueryWrapper<JoinedMotorcadeEntity>()
                 .eq(JoinedMotorcadeEntity::getMotorcadeId, joinedMotorcadeParam.getMotorcadeId())
                 .eq(JoinedMotorcadeEntity::getUserId, user.getId()));
@@ -70,30 +74,23 @@ public class JoinedMotorcadeController {
                 .select(GroupChatEntity::getId)
                 .eq(GroupChatEntity::getMotorcadeId, joinedMotorcadeParam.getMotorcadeId()));
 
-        // 获取加入时收到的第一次消息id
-        Integer maxIdByGroupId = groupMsgContentService.getMaxIdByMotorcadeId(one.getId());
+        // 校验当前人数是否已满
+        int count = joinedMotorcadeService.count(new LambdaQueryWrapper<JoinedMotorcadeEntity>()
+                .eq(JoinedMotorcadeEntity::getMotorcadeId, joinedMotorcadeParam.getMotorcadeId()));
+        int total = motorcadeEntity.getAlreadyExisting()+count;
+        Assert.isTrue(total <  motorcadeEntity.getMaximumNumber(),RS.FLEET_IS_FULL.message());
+
         joinedMotorcadeEntity = new JoinedMotorcadeEntity();
         joinedMotorcadeEntity.setMotorcadeId(joinedMotorcadeParam.getMotorcadeId());
         joinedMotorcadeEntity.setUserId(user.getId());
         joinedMotorcadeService.save(joinedMotorcadeEntity);
-        // 校验当前人数是否已满
-        int count = joinedMotorcadeService.count(new LambdaQueryWrapper<JoinedMotorcadeEntity>()
-                .eq(JoinedMotorcadeEntity::getMotorcadeId, joinedMotorcadeParam.getMotorcadeId()));
-        MotorcadeEntity motorcadeEntity = motorcadeService.getById(joinedMotorcadeParam.getMotorcadeId());
-        int total = motorcadeEntity.getAlreadyExisting() + count;
-        Assert.isTrue(total<= motorcadeEntity.getMaximumNumber(),RS.FLEET_IS_FULL.message());
 
         // 加入聊天室
-        GroupChatMemberEntity groupChatMemberEntity = new GroupChatMemberEntity();
-        groupChatMemberEntity.setFirstMessageId(maxIdByGroupId);
-        groupChatMemberEntity.setLastMessageId(maxIdByGroupId);
-        groupChatMemberEntity.setUserId(user.getId());
-        groupChatMemberEntity.setGroupId(one.getId());
-        groupChatMemberService.save(groupChatMemberEntity);
+        groupChatMemberService.joinGroupChat(user.getId(),one.getId());
 
         // 发送车队改变通知
         fleetChangesEventPublisher.publish(new FleetChangesEventMessage(
-                total == motorcadeEntity.getMaximumNumber()?FleetChangesEnum.SUCCESS.getCode():FleetChangesEnum.JOIN.getCode()
+                total+1 == motorcadeEntity.getMaximumNumber()?FleetChangesEnum.SUCCESS.getCode():FleetChangesEnum.JOIN.getCode()
                 ,motorcadeEntity.getId()
                 ,user.getId()));
         return R.success();

@@ -1,6 +1,7 @@
 package com.secret.controller;
 
 
+import com.secret.config.FileConfig;
 import com.secret.constant.RS;
 import com.secret.model.entity.FileEntity;
 import com.secret.model.vo.FileVo;
@@ -10,6 +11,7 @@ import com.secret.utils.TransferUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +38,13 @@ import java.util.UUID;
 @Slf4j
 public class FileController {
 
-    @Value("${file.upload.path}")
-    public String uploadPath;
 
-    @Value("${spring.redirect_uri}")
-    public String baseUrl;
 
     @Resource
     private FileService fileService;
+
+    @Autowired
+    private FileConfig fileConfig;
 
     @Resource
     private HttpServletResponse response;
@@ -54,7 +55,7 @@ public class FileController {
         if(!file.isEmpty()){
             // 如果目录不存在则创建
             httpServletResponse.setContentType("text/html;charset=utf-8");
-            File uploadDir = new File(uploadPath);
+            File uploadDir = new File(fileConfig.getFileUrl());
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
@@ -62,7 +63,7 @@ public class FileController {
             String suffixName = OriginalFilename.substring(OriginalFilename.lastIndexOf("."));//获取文件后缀名
             //重新随机生成名字
             String filename = UUID.randomUUID().toString() + suffixName;
-            File localFile = new File(uploadPath + "/" + filename);
+            File localFile = new File(fileConfig.getFileUrl() + "/" + filename);
             try {
                 file.transferTo(localFile); //把上传的文件保存至本地
                 FileEntity fileEntity = new FileEntity();
@@ -71,7 +72,7 @@ public class FileController {
                 fileService.save(fileEntity);
                 FileVo fileVo = new FileVo();
                 TransferUtils.transferBean(fileEntity,fileVo);
-                String url = baseUrl+fileVo.getId();
+                String url = fileConfig.getBaseUrl()+fileVo.getId();
                 fileVo.setUrl(url);
                 return R.success(fileVo);
             }catch (IOException e){
@@ -82,8 +83,6 @@ public class FileController {
             return R.fail(RS.FILE_NOT_FOUNT);
         }
     }
-    @Value("${file.upload.path}")
-    String fileUrl;
 
     @GetMapping(value = "/getFile/{id}",produces = MediaType.IMAGE_JPEG_VALUE)
     @ApiOperation("获取图片-以ImageIO流形式写回")
@@ -115,10 +114,10 @@ public class FileController {
     }
 
     String getFileUrl(){
-        if(StringUtils.isEmpty(fileUrl)){
+        if(StringUtils.isEmpty(fileConfig.getFileUrl())){
             return "/home/nginx/html/file/";
         }
-        return fileUrl.lastIndexOf("/")==fileUrl.length()-1?fileUrl:fileUrl+"/";
+        return fileConfig.getFileUrl().lastIndexOf("/")==fileConfig.getFileUrl().length()-1?fileConfig.getFileUrl():fileConfig.getFileUrl()+"/";
     }
 
 }

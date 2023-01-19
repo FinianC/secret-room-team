@@ -54,7 +54,9 @@ public enum RS {
 
 	FLEET_IS_FULL(2005,"车队已满员"),
 	
-	GROUP_CHAT_NOT_EXIST(2006,"群聊不存在")
+	GROUP_CHAT_NOT_EXIST(2006,"群聊不存在"),
+
+	FLEET_DOES_NOT_EXIST(2007,"车队不存在"),
 	;
 
 	private final int status;

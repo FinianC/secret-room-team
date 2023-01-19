@@ -33,7 +33,7 @@ public class R<T> implements Serializable {
 	@ApiModelProperty("响应数据")
 	private T data;
 
-	private static String redirect_url;
+	public static String redirect_url;
 
 	public R (int code, String message, T data) {
 		this.baseUrl=R.redirect_url;

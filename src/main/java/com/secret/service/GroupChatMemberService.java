@@ -3,6 +3,8 @@ package com.secret.service;
 import com.secret.model.entity.GroupChatMemberEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -19,5 +21,29 @@ public interface GroupChatMemberService extends IService<GroupChatMemberEntity> 
      * @return
      */
     Boolean isGroupMember(Integer userId,Integer chatId);
+
+    /**
+     * 加入群聊
+     * @param userId
+     * @param chatId
+     * @return
+     */
+    GroupChatMemberEntity joinGroupChat(Integer userId, Integer chatId);
+
+    /**
+     * 加入群聊&群主
+     * @param userId
+     * @param chatId
+     * @param isGroupLeader
+     * @return
+     */
+    GroupChatMemberEntity joinGroupChat(Integer userId,Integer chatId,Boolean isGroupLeader);
+
+    /**
+     * 获取群成员头像
+     * @param chatId
+     * @return
+     */
+    List<String> getMemberHeadPortrait(Integer chatId);
 
 }

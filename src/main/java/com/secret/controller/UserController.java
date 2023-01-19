@@ -15,6 +15,7 @@ import com.secret.utils.RedisUtils;
 import com.secret.utils.TransferUtils;
 import com.secret.utils.UserLoginUtils;
 import com.secret.utils.WechatUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +36,7 @@ import java.math.BigDecimal;
  */
 @RestController
 @RequestMapping("/user")
+@Api("用户前端控制器")
 @Slf4j
 public class UserController {
 
