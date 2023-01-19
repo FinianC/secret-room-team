@@ -15,10 +15,7 @@ import com.secret.utils.UserLoginUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,8 +34,8 @@ public class ThemeController {
     @Autowired
     private ThemeService themeService;
 
-    @ApiOperation(value = "分页查询消息分页列表", httpMethod = "POST")
-    @PostMapping("/page")
+    @ApiOperation(value = "主题列表", httpMethod = "GET")
+    @GetMapping("/list")
     public R<List<ThemeVo>> list(){
         List<ThemeEntity> list = themeService.list();
         List<ThemeVo> themeVos = TransferUtils.transferList(list, ThemeVo.class);

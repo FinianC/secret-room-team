@@ -11,6 +11,7 @@ import com.secret.service.GroupMsgContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,13 +27,13 @@ import java.util.stream.Collectors;
 public class GroupChatMemberServiceImpl extends ServiceImpl<GroupChatMemberMapper, GroupChatMemberEntity> implements GroupChatMemberService {
 
 
-    @Autowired
+    @Resource
     private GroupChatMemberMapper groupChatMemberMapper;
 
-    @Autowired
+    @Resource
     private GroupMsgContentService groupMsgContentService;
 
-    @Autowired
+    @Resource
     private GroupChatService groupChatService;
 
 

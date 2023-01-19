@@ -36,7 +36,6 @@ import java.util.List;
  * @since 2022-11-13
  */
 @RestController
-@Api("车队前端控制器")
 @RequestMapping("/motorcade")
 public class MotorcadeController {
 

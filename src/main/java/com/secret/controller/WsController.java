@@ -20,6 +20,7 @@ import com.secret.service.*;
 import com.secret.utils.DateUtil;
 import com.secret.utils.TransferUtils;
 import com.secret.utils.UserLoginUtils;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -36,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author Hai
+ * @author cd
  * @date 2020/6/16 - 23:34
  */
 @Controller

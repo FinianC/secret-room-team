@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-11-13
  */
 @RestController
-@Api("加入车队前端控制器")
 @RequestMapping("/user/joinedMotorcade")
 public class JoinedMotorcadeController {
 

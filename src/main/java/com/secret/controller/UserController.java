@@ -36,7 +36,6 @@ import java.math.BigDecimal;
  */
 @RestController
 @RequestMapping("/user")
-@Api("用户前端控制器")
 @Slf4j
 public class UserController {
 
