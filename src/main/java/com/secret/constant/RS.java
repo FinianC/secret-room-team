@@ -57,6 +57,10 @@ public enum RS {
 	GROUP_CHAT_NOT_EXIST(2006,"群聊不存在"),
 
 	FLEET_DOES_NOT_EXIST(2007,"车队不存在"),
+
+	INSUFFICIENT_PERMISSIONS(2008,"暂无操作权限"),
+
+	MEMBER_NOT_FOUND(2009,"未找到该成员"),
 	;
 
 	private final int status;

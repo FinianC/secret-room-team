@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class JoinedMotorcadeParam {
 
     @ApiModelProperty(value = "车队id")
-    @TableField("motorcade_id")
     private Integer motorcadeId;
 
 }

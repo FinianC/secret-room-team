@@ -2,6 +2,7 @@ package com.secret.service;
 
 import com.secret.model.entity.JoinedMotorcadeEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.omg.CORBA.INTERNAL;
 
 /**
  * <p>
@@ -12,5 +13,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-11-13
  */
 public interface JoinedMotorcadeService extends IService<JoinedMotorcadeEntity> {
+
+
+    /**
+     * 离开车队
+     * @param userId
+     * @param motorcadeId
+     * @return
+     */
+    Boolean leave(Integer userId, Integer motorcadeId);
 
 }

@@ -2,22 +2,17 @@ package com.secret.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.constant.RS;
-import com.secret.event.FleetChangesEvent;
 import com.secret.event.producer.FleetChangesEventPublisher;
 import com.secret.model.dto.FleetChangesEventMessage;
 import com.secret.model.entity.*;
 import com.secret.model.enums.FleetChangesEnum;
 import com.secret.model.params.JoinedMotorcadeParam;
-import com.secret.model.vo.MotorcadeVo;
+import com.secret.model.params.KickOutParam;
 import com.secret.model.vo.R;
-import com.secret.model.vo.UserVerificationVo;
 import com.secret.model.vo.UserVo;
 import com.secret.service.*;
 import com.secret.utils.UserLoginUtils;
-import com.secret.utils.UserUtils;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,9 +39,6 @@ public class JoinedMotorcadeController {
 
     @Autowired
     private FleetChangesEventPublisher fleetChangesEventPublisher;
-
-    @Autowired
-    private GroupMsgContentService groupMsgContentService;
 
     @Autowired
     private GroupChatMemberService groupChatMemberService;
@@ -97,23 +89,22 @@ public class JoinedMotorcadeController {
 
     @ApiOperation(value = "离开车队", httpMethod = "POST")
     @PostMapping("/leave")
+    @Transactional
     public R leave(@RequestBody JoinedMotorcadeParam joinedMotorcadeParam) {
         UserVo user =(UserVo) UserLoginUtils.getUserInfo().getUser();
+        joinedMotorcadeService.leave(user.getId(),joinedMotorcadeParam.getMotorcadeId());
+        return R.success();
+    }
 
-        joinedMotorcadeService.remove(new LambdaQueryWrapper<JoinedMotorcadeEntity>()
-                .eq(JoinedMotorcadeEntity::getMotorcadeId,joinedMotorcadeParam.getMotorcadeId())
-                .eq(JoinedMotorcadeEntity::getUserId,user.getId()));
-
-        GroupChatEntity one = groupChatService.getOne(new LambdaQueryWrapper<GroupChatEntity>()
-                .select(GroupChatEntity::getId)
-                .eq(GroupChatEntity::getMotorcadeId, joinedMotorcadeParam.getMotorcadeId()));
-        groupChatMemberService.remove(new LambdaQueryWrapper<GroupChatMemberEntity>()
-                .eq(GroupChatMemberEntity::getGroupId,one.getId())
-                .eq(GroupChatMemberEntity::getUserId,user.getId()));
-        fleetChangesEventPublisher.publish(new FleetChangesEventMessage(
-              FleetChangesEnum.LEAVE.getCode()
-                ,joinedMotorcadeParam.getMotorcadeId()
-                ,user.getId()));
+    @ApiOperation(value = "踢出车队", httpMethod = "POST")
+    @PostMapping("/kickOut")
+    @Transactional
+    public R kickOut(@RequestBody KickOutParam kickOutParam) {
+        UserVo user =(UserVo) UserLoginUtils.getUserInfo().getUser();
+        MotorcadeEntity motorcadeEntity = motorcadeService.getById(kickOutParam.getMotorcadeId());
+        Assert.notNull(motorcadeEntity,RS.FLEET_DOES_NOT_EXIST.message());
+        Assert.isTrue(motorcadeEntity.getUserId().equals(user.getId()),RS.INSUFFICIENT_PERMISSIONS.message());
+        joinedMotorcadeService.leave(kickOutParam.getUserId(),kickOutParam.getMotorcadeId());
         return R.success();
     }
 }

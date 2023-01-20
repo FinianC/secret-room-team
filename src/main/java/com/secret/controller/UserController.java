@@ -3,6 +3,7 @@ package com.secret.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.secret.config.MiniAppBean;
 import com.secret.constant.RS;
 import com.secret.model.entity.UserEntity;
 import com.secret.model.params.UserGetOpenIdParam;
@@ -42,17 +43,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Value("${wechat.appId}")
-    private String appId;
 
-    @Value("${wechat.appSecret}")
-    private String appSecret;
+    @Autowired
+    private MiniAppBean miniAppBean;
 
 
     @ApiOperation(value = "微信code登录", notes = "用户登录信息在header里面获取 token", httpMethod = "POST")
     @PostMapping("/getOpenId")
     public R<UserVerificationVo<UserVo>> getOpenId(@RequestBody UserGetOpenIdParam userGetOpenIdParam) {
-        JSONObject jsonObject = WechatUtil.getOpenid(appId, appSecret, userGetOpenIdParam.getCode());
+        JSONObject jsonObject = WechatUtil.getOpenid(miniAppBean.getAppId(), miniAppBean.getAppSecret(), userGetOpenIdParam.getCode());
         String openId = jsonObject.getString("openid");
         if (StringUtils.isEmpty(openId)) {
             log.error("getOpenid error {}", JSONObject.toJSONString(jsonObject));

@@ -46,4 +46,12 @@ public interface GroupChatMemberService extends IService<GroupChatMemberEntity> 
      */
     List<String> getMemberHeadPortrait(Integer chatId);
 
+    /**
+     * 离开聊天室
+     * @param userId
+     * @param chatId
+     * @return
+     */
+    Boolean leaveGroupChat(Integer userId, Integer chatId);
+
 }

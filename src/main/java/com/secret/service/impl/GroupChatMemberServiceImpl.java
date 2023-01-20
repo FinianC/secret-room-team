@@ -1,5 +1,6 @@
 package com.secret.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.secret.model.entity.GroupChatMemberEntity;
 import com.secret.mapper.GroupChatMemberMapper;
 import com.secret.model.enums.GroupLeaderEnum;
@@ -102,5 +103,21 @@ public class GroupChatMemberServiceImpl extends ServiceImpl<GroupChatMemberMappe
             }
             return filePath;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 离开聊天室
+     *
+     * @param userId
+     * @param chatId
+     * @return
+     */
+    @Override
+    public Boolean leaveGroupChat(Integer userId, Integer chatId) {
+        boolean remove = this.remove(new LambdaQueryWrapper<GroupChatMemberEntity>()
+                .eq(GroupChatMemberEntity::getGroupId, chatId)
+                .eq(GroupChatMemberEntity::getUserId, userId));
+        groupChatService.changeHeadPortrait(chatId);
+        return remove;
     }
 }
