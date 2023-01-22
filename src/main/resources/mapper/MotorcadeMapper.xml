@@ -63,7 +63,7 @@
 
     <sql id="jmt">
         jmt.id as jmt_id,
-        jmt.user_id,
+        jmt.user_id as jmt_user_id,
         jmt.motorcade_id
     </sql>
     <sql id="u2">
@@ -88,7 +88,7 @@
             ,<include refid="t" />
         FROM
             s_motorcade mt
-            LEFT JOIN s_user u ON mt.create_user = u.id
+            LEFT JOIN s_user u ON mt.user_id = u.id
             LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
             LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
             LEFT JOIN s_theme t ON t.id = mt.theme_id
@@ -108,7 +108,7 @@
         ,<include refid="t" />
         FROM
         s_motorcade mt
-        LEFT JOIN s_user u ON mt.create_user = u.id
+        LEFT JOIN s_user u ON mt.user_id = u.id
         LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
         LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
         LEFT JOIN s_theme t ON t.id = mt.theme_id
@@ -123,6 +123,7 @@
             </if>
         </where>
          and mt.delete_state = 0
+         and mt.status = 1
     </select>
     <select id="getMotorcadeVo" resultMap="motorcadeVo">
         SELECT
@@ -135,7 +136,7 @@
         ,<include refid="t" />
         FROM
         s_motorcade mt
-        LEFT JOIN s_user u ON mt.create_user = u.id
+        LEFT JOIN s_user u ON mt.user_id = u.id
         LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
         LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
         LEFT JOIN s_theme t ON t.id = mt.theme_id

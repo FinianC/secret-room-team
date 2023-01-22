@@ -62,4 +62,20 @@ public class JoinedMotorcadeServiceImpl extends ServiceImpl<JoinedMotorcadeMappe
                 ,userId));
         return null;
     }
+
+    /**
+     * 加入车队
+     *
+     * @param userId
+     * @param motorcadeId
+     * @return
+     */
+    @Override
+    public JoinedMotorcadeEntity join(Integer userId, Integer motorcadeId) {
+        JoinedMotorcadeEntity joinedMotorcadeEntity = new JoinedMotorcadeEntity();
+        joinedMotorcadeEntity.setMotorcadeId(motorcadeId);
+        joinedMotorcadeEntity.setUserId(userId);
+        save(joinedMotorcadeEntity);
+        return  joinedMotorcadeEntity;
+    }
 }

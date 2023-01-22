@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.constant.RS;
 import com.secret.model.entity.GroupChatEntity;
 import com.secret.model.entity.UserEntity;
+import com.secret.model.enums.MotorcadeStatusEnum;
 import com.secret.model.enums.UserRoleEnum;
 import com.secret.model.entity.MotorcadeEntity;
 import com.secret.model.params.MotorcadeModifyParam;
@@ -20,6 +21,7 @@ import com.secret.utils.UserLoginUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +45,6 @@ public class MotorcadeController {
     private MotorcadeService motorcadeService;
 
     @Autowired
-    private FileService fileService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -53,6 +52,9 @@ public class MotorcadeController {
 
     @Autowired
     private GroupChatMemberService groupChatMemberService;
+
+    @Autowired
+    private JoinedMotorcadeService joinedMotorcadeService;
 
     @ApiOperation(value = "发布车队信息", httpMethod = "POST")
     @PostMapping("/user/add")
@@ -64,12 +66,14 @@ public class MotorcadeController {
         MotorcadeEntity motorcadeEntity = new MotorcadeEntity();
         TransferUtils.transferBean(motorcadeParam,motorcadeEntity);
         motorcadeEntity.setUserId(user.getId());
+        motorcadeEntity.setStatus(MotorcadeStatusEnum.HAVE_IN_HAND.getCode());
         motorcadeService.save(motorcadeEntity);
-        MotorcadeEntity byId = motorcadeService.getById(motorcadeEntity.getId());
-        MotorcadeVo motorcadeVo = new MotorcadeVo();
-        TransferUtils.transferBean(byId,motorcadeVo);
+        MotorcadeVo motorcadeVo=new MotorcadeVo();
+        TransferUtils.transferBean(motorcadeEntity,motorcadeVo);
+        // 加入车队
+        joinedMotorcadeService.join(user.getId(),motorcadeEntity.getId());
         // 创建聊天室
-        GroupChatEntity groupChat = groupChatService.createGroupChat(byId);
+        GroupChatEntity groupChat = groupChatService.createGroupChat(motorcadeEntity);
         // 加入群聊
         groupChatMemberService.joinGroupChat(user.getId(),groupChat.getId(),Boolean.TRUE);
         return R.success(motorcadeVo);

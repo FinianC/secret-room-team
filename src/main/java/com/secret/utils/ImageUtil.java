@@ -197,7 +197,7 @@ public final class ImageUtil {
             double ratio = 0; // 缩放比例
 //            System.out.println("图片缩放"+filePath);
             BufferedImage bi = null;
-            if (filePath.indexOf("http://") == 0) {
+            if (filePath.indexOf("http://") == 0 || filePath.indexOf("https://") == 0 ) {
                 bi = ImageIO.read(new URL(filePath));
             } else {
                 bi = ImageIO.read(new File(filePath));

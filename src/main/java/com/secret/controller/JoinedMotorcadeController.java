@@ -70,11 +70,8 @@ public class JoinedMotorcadeController {
                 .eq(JoinedMotorcadeEntity::getMotorcadeId, joinedMotorcadeParam.getMotorcadeId()));
         int total = motorcadeEntity.getAlreadyExisting()+count;
         Assert.isTrue(total <  motorcadeEntity.getMaximumNumber(),RS.FLEET_IS_FULL.message());
-
-        joinedMotorcadeEntity = new JoinedMotorcadeEntity();
-        joinedMotorcadeEntity.setMotorcadeId(joinedMotorcadeParam.getMotorcadeId());
-        joinedMotorcadeEntity.setUserId(user.getId());
-        joinedMotorcadeService.save(joinedMotorcadeEntity);
+        // 加入车队
+        joinedMotorcadeService.join(user.getId(),joinedMotorcadeParam.getMotorcadeId());
 
         // 加入聊天室
         groupChatMemberService.joinGroupChat(user.getId(),one.getId());

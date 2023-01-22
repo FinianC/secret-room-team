@@ -38,8 +38,8 @@ public class GroupChatMemberEntity implements Serializable {
     private Integer userId;
 
     @ApiModelProperty(value = "群主 1")
-    @TableField(" is_group_leader")
-    private Integer  isGroupLeader;
+    @TableField("is_group_leader")
+    private Integer isGroupLeader;
 
     @ApiModelProperty(value = "群id")
     @TableField("group_id")

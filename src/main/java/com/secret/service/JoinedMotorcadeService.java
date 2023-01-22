@@ -23,4 +23,12 @@ public interface JoinedMotorcadeService extends IService<JoinedMotorcadeEntity> 
      */
     Boolean leave(Integer userId, Integer motorcadeId);
 
+    /**
+     * 加入车队
+     * @param userId
+     * @param motorcadeId
+     * @return
+     */
+    JoinedMotorcadeEntity join(Integer userId ,Integer motorcadeId);
+
 }
