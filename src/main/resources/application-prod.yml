@@ -5,17 +5,17 @@ spring:
     name: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.100.68.162:3306/jydb?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
-    username: root
-    password: Qq2428865264
+    url: jdbc:mysql://127.0.0.1:3306/jydb?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+    username: xxx
+    password: xxxx
   servlet:
     multipart:
       max-file-size: 10GB
       max-request-size: 10GB
   redis:
-    host: 47.100.68.162
+    host: 127.0.0.1
     port: 6379
-    password: 2428865264
+    password: xxxx
     timeout: 3000
 mybatis-plus:
   configuration:
@@ -25,7 +25,7 @@ mybatis-plus:
     - classpath:mapper/*.xml
 
 wechat:
-  appId: wx4be76fcc1ea24095
-  appSecret: 5984430fae5c7add413ae8e114b8c983
+  appId: xx
+  appSecret: xx
   openId:
   isDebug: false
