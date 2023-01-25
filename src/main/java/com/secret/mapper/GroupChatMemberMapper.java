@@ -26,4 +26,11 @@ public interface GroupChatMemberMapper extends BaseMapper<GroupChatMemberEntity>
      * @return
      */
     List<String> getMemberHeadPortrait(@Param("chatId") Integer chatId);
+
+    /**
+     * 根据群id获取userId
+     * @param chatId
+     * @return
+     */
+    List<Integer> getUIdByCId(@Param("chatId") Integer chatId);
 }

@@ -37,4 +37,14 @@ public interface GroupChatService extends IService<GroupChatEntity> {
      * @return
      */
     Boolean changeHeadPortrait(Integer chatId);
+
+
+    /**
+     * 根据用户id & 群聊id 获取聊天框
+     * @param userId
+     * @param chatId
+     */
+    ChatListVo getChatByUIdAndCId(Integer userId ,Integer chatId);
+
+
 }

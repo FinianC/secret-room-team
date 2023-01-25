@@ -11,7 +11,7 @@
         <result property="message" column="content"/>
         <result property="messageId" column="gmc_id"/>
         <result property="messageTypeId" column="message_type_id"/>
-        <result property="dateTime" column="create_time"/>
+        <result property="dateTime" column="gmc_create_time"/>
         <result property="nickname" column="nickname"/>
     </resultMap>
 
@@ -29,7 +29,7 @@
     </sql>
     
     <sql id="gmc">
-        gmc.id = gmc_id ,
+        gmc.id as gmc_id ,
         gmc.content ,
         gmc.message_type_id ,
         gmc.create_time as gmc_create_time
@@ -50,8 +50,23 @@
             LEFT JOIN s_group_chat_member gcm2 on gcm2.id = gmc.member_id
             LEFT JOIN s_user u on u.id = gcm2.user_id
         WHERE
-            gcm.user_id = {userId}
+            gcm.user_id = #{userId}
             AND gcm.delete_state = 0
-
+            order by gmc.create_time desc
+    </select>
+    <select id="getChatByUIdAndCId" resultMap="chatListDto">
+        SELECT
+        <include refid="gc"/> , <include refid="gcm"/> , <include refid="gmc"/> ,<include refid="u"/>
+        FROM
+        s_group_chat gc
+        JOIN s_group_chat_member gcm ON gc.id = gcm.group_id
+        LEFT JOIN s_group_msg_content gmc ON gmc.group_id = gc.id
+        AND gmc.id = ( SELECT max( id ) FROM s_group_msg_content WHERE group_id = gc.id )
+        LEFT JOIN s_group_chat_member gcm2 on gcm2.id = gmc.member_id
+        LEFT JOIN s_user u on u.id = gcm2.user_id
+        WHERE
+        gcm.user_id = #{userId}
+        AND gc.id = #{chatId}
+        AND gcm.delete_state = 0
     </select>
 </mapper>

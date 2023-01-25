@@ -54,4 +54,11 @@ public interface GroupChatMemberService extends IService<GroupChatMemberEntity> 
      */
     Boolean leaveGroupChat(Integer userId, Integer chatId);
 
+    /**
+     * 根据群id获取userId
+     * @param chatId
+     * @return
+     */
+    List<Integer> getUIdByCId(Integer chatId);
+
 }

@@ -40,7 +40,7 @@
         select max(gmc.id) from s_group_msg_content gmc where gmc.group_id  = #{groupId} and delete_state  =0
     </select>
     <select id="getUnreadTotal" resultType="java.lang.Integer">
-        select COUNT(gmc.id) from  s_group_msg_content gmc where gmc &gt; #{lastMessageId} and gmc.group_id = #{chatId} and delete_state  =0
+        select COUNT(gmc.id) from  s_group_msg_content gmc where gmc.id &gt; #{lastMessageId} and gmc.group_id = #{chatId} and delete_state  =0
     </select>
     <select id="pageByChatId" resultMap="groupMsgContentVo">
 

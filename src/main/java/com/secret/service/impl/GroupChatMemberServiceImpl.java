@@ -120,4 +120,16 @@ public class GroupChatMemberServiceImpl extends ServiceImpl<GroupChatMemberMappe
         groupChatService.changeHeadPortrait(chatId);
         return remove;
     }
+
+    /**
+     * 根据群id获取userId
+     *
+     * @param chatId
+     * @return
+     */
+    @Override
+    public List<Integer> getUIdByCId(Integer chatId) {
+        List<Integer> uIdByCId = groupChatMemberMapper.getUIdByCId(chatId);
+        return uIdByCId;
+    }
 }

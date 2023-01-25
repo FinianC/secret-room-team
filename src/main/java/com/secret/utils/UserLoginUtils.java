@@ -48,6 +48,10 @@ public class UserLoginUtils {
         log.info("get into getUserInfo");
         String token = getRequestHeaderMap().get("token");
         log.info("token {}",token);
+        return  getUserInfo(token);
+    }
+
+    public static UserVerificationVo getUserInfo(String token) {
         if (StringUtils.isEmpty(token)) {
             throw new ServiceException(RS.LOGIN_FAIL);
         }

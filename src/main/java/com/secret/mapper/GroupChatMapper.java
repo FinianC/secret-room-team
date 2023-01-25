@@ -3,6 +3,7 @@ package com.secret.mapper;
 import com.secret.model.dto.ChatListDto;
 import com.secret.model.entity.GroupChatEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,5 +23,13 @@ public interface GroupChatMapper extends BaseMapper<GroupChatEntity> {
      * @param userId
      * @return
      */
-    List<ChatListDto> getChatByUserId(Integer userId);
+    List<ChatListDto> getChatByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 根据用户id & 群聊id 获取聊天框
+     * @param userId
+     * @param chatId
+     * @return
+     */
+    ChatListDto getChatByUIdAndCId(@Param("userId") Integer userId,@Param("chatId") Integer chatId);
 }

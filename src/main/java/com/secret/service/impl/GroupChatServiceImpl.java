@@ -1,12 +1,10 @@
 package com.secret.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.secret.config.FileConfig;
 import com.secret.model.dto.ChatListDto;
 import com.secret.model.entity.GroupChatEntity;
 import com.secret.mapper.GroupChatMapper;
-import com.secret.model.entity.GroupChatMemberEntity;
 import com.secret.model.entity.MotorcadeEntity;
 import com.secret.model.enums.UnreadMessageEnum;
 import com.secret.model.vo.ChatListVo;
@@ -17,7 +15,6 @@ import com.secret.service.GroupMsgContentService;
 import com.secret.utils.ImageUtil;
 import com.secret.utils.TransferUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -59,10 +56,10 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
         List<ChatListDto> chatByUserId = groupChatMapper.getChatByUserId(userId);
         chatByUserId.forEach( chatListDto ->  {
             // 获取未读数量
-            if(!chatListDto.getLastMessageId().equals(chatListDto.getMessageId())){
+            if( chatListDto.getMessageId() != null && !chatListDto.getLastMessageId().equals(chatListDto.getMessageId())){
                 chatListDto.setUnreadMessage(UnreadMessageEnum.HAVE.getCode());
                 Integer unreadTotal = groupMsgContentService.getUnreadTotal(chatListDto.getLastMessageId(), chatListDto.getChatId());
-                chatListDto.setUnreadMessage(unreadTotal);
+                chatListDto.setUnreadMessageQuantity(unreadTotal);
             }else{
                 chatListDto.setUnreadMessage(UnreadMessageEnum.EMPTY.getCode());
             }
@@ -105,5 +102,27 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
             log.error("error failed to generate avatar ,chat id {}",chatId,e);
         }
         return Boolean.FALSE;
+    }
+
+    /**
+     * 根据用户id & 群聊id 获取聊天框
+     *
+     * @param userId
+     * @param chatId
+     */
+    @Override
+    public ChatListVo getChatByUIdAndCId(Integer userId, Integer chatId) {
+       ChatListDto chatListDto = groupChatMapper.getChatByUIdAndCId(userId,chatId);
+        // 获取未读数量
+        if(!chatListDto.getLastMessageId().equals(chatListDto.getMessageId())){
+            chatListDto.setUnreadMessage(UnreadMessageEnum.HAVE.getCode());
+            Integer unreadTotal = groupMsgContentService.getUnreadTotal(chatListDto.getLastMessageId(), chatListDto.getChatId());
+            chatListDto.setUnreadMessage(unreadTotal);
+        }else{
+            chatListDto.setUnreadMessage(UnreadMessageEnum.EMPTY.getCode());
+        }
+        ChatListVo chatListVo = new ChatListVo();
+        TransferUtils.transferBean(chatListDto, chatListVo);
+        return chatListVo;
     }
 }
