@@ -169,11 +169,11 @@
 
 
 		<!--mybatis-plus自动建表-->
-		<dependency>
-			<groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
-			<artifactId>mybatis-enhance-actable</artifactId>
-			<version>1.5.0.RELEASE</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.gitee.sunchenbin.mybatis.actable</groupId>-->
+<!--			<artifactId>mybatis-enhance-actable</artifactId>-->
+<!--			<version>1.5.0.RELEASE</version>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -182,6 +182,10 @@
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
 

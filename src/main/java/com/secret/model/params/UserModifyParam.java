@@ -3,12 +3,14 @@ package com.secret.model.params;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
 @ApiModel("用户修改参数")
 public class UserModifyParam {
 
     @ApiModelProperty(value = "id")
+    @NonNull
     private Integer id;
 
     @ApiModelProperty(value = "昵称")
@@ -19,6 +21,9 @@ public class UserModifyParam {
 
     @ApiModelProperty(value = "电话号码")
     private String phone;
+
+    @ApiModelProperty(value = "头像")
+    private String headerImg;
 
     @ApiModelProperty(value = "微信号")
     private String wechatNumber;

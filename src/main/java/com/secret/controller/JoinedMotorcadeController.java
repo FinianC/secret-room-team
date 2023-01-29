@@ -9,6 +9,7 @@ import com.secret.model.entity.*;
 import com.secret.model.enums.FleetChangesEnum;
 import com.secret.model.params.JoinedMotorcadeParam;
 import com.secret.model.params.KickOutParam;
+import com.secret.model.vo.MotorcadeVo;
 import com.secret.model.vo.R;
 import com.secret.model.vo.UserVo;
 import com.secret.service.*;
@@ -51,7 +52,7 @@ public class JoinedMotorcadeController {
     @ApiOperation(value = "加入车队", httpMethod = "POST")
     @PostMapping("/join")
     @Transactional
-    public R join(@RequestBody JoinedMotorcadeParam joinedMotorcadeParam) {
+    public R<MotorcadeVo> join(@RequestBody JoinedMotorcadeParam joinedMotorcadeParam) {
         UserVo user =(UserVo) UserLoginUtils.getUserInfo().getUser();
         // check
         MotorcadeEntity motorcadeEntity = motorcadeService.getById(joinedMotorcadeParam.getMotorcadeId());
@@ -81,28 +82,31 @@ public class JoinedMotorcadeController {
                 total+1 == motorcadeEntity.getMaximumNumber()?FleetChangesEnum.SUCCESS.getCode():FleetChangesEnum.JOIN.getCode()
                 ,motorcadeEntity.getId()
                 ,user.getId()));
-        return R.success();
+        MotorcadeVo motorcadeVo = motorcadeService.getMotorcadeVo(joinedMotorcadeParam.getMotorcadeId());
+        return R.success(motorcadeVo);
     }
 
     @ApiOperation(value = "离开车队", httpMethod = "POST")
     @PostMapping("/leave")
     @Transactional
-    public R leave(@RequestBody JoinedMotorcadeParam joinedMotorcadeParam) {
+    public R<MotorcadeVo> leave(@RequestBody JoinedMotorcadeParam joinedMotorcadeParam) {
         UserVo user =(UserVo) UserLoginUtils.getUserInfo().getUser();
         joinedMotorcadeService.leave(user.getId(),joinedMotorcadeParam.getMotorcadeId());
-        return R.success();
+        MotorcadeVo motorcadeVo = motorcadeService.getMotorcadeVo(joinedMotorcadeParam.getMotorcadeId());
+        return R.success(motorcadeVo);
     }
 
     @ApiOperation(value = "踢出车队", httpMethod = "POST")
     @PostMapping("/kickOut")
     @Transactional
-    public R kickOut(@RequestBody KickOutParam kickOutParam) {
+    public R<MotorcadeVo> kickOut(@RequestBody KickOutParam kickOutParam) {
         UserVo user =(UserVo) UserLoginUtils.getUserInfo().getUser();
         MotorcadeEntity motorcadeEntity = motorcadeService.getById(kickOutParam.getMotorcadeId());
         Assert.notNull(motorcadeEntity,RS.FLEET_DOES_NOT_EXIST.message());
         Assert.isTrue(motorcadeEntity.getUserId().equals(user.getId()),RS.INSUFFICIENT_PERMISSIONS.message());
         joinedMotorcadeService.leave(kickOutParam.getUserId(),kickOutParam.getMotorcadeId());
-        return R.success();
+        MotorcadeVo motorcadeVo = motorcadeService.getMotorcadeVo(kickOutParam.getMotorcadeId());
+        return R.success(motorcadeVo);
     }
 }
 

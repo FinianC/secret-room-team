@@ -67,6 +67,8 @@ public class MotorcadeController {
         TransferUtils.transferBean(motorcadeParam,motorcadeEntity);
         motorcadeEntity.setUserId(user.getId());
         motorcadeEntity.setStatus(MotorcadeStatusEnum.HAVE_IN_HAND.getCode());
+        motorcadeEntity.setClusteringNumber(motorcadeParam.getMaximumNumber());
+//        motorcadeEntity.setCompetitionDate();
         motorcadeService.save(motorcadeEntity);
         MotorcadeVo motorcadeVo=new MotorcadeVo();
         TransferUtils.transferBean(motorcadeEntity,motorcadeVo);

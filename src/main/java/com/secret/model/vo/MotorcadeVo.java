@@ -78,6 +78,9 @@ public class MotorcadeVo {
     @ApiModelProperty(value = "是否加入 1加入 0未加入")
     private Integer joined;
 
+    @ApiModelProperty(value = "用户id")
+    private Integer userId;
+
     @ApiModelProperty("车队内成员")
     private List<JoinedMotorcadeVo> joinedMotorcadeVos;
 }

@@ -3,6 +3,7 @@ package com.secret.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.model.entity.MotorcadeEntity;
 import com.secret.mapper.MotorcadeMapper;
+import com.secret.model.enums.JoinStatusEnum;
 import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.*;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -26,13 +28,15 @@ import java.util.List;
 @Service
 public class MotorcadeServiceImpl extends ServiceImpl<MotorcadeMapper, MotorcadeEntity> implements MotorcadeService {
 
-    @Autowired
+    @Resource
     private MotorcadeMapper motorcadeMapper;
 
     @Override
     public MotorcadeVo getMotorcadeVoById(Integer id) {
-        MotorcadeVo motorcadeVoById = motorcadeMapper.getMotorcadeVoById(id);
-        return motorcadeVoById;
+        UserVo user =(UserVo)UserLoginUtils.getUserInfo().getUser();
+        MotorcadeVo motorcadeVo = motorcadeMapper.getMotorcadeVoById(id);
+        motorcadeVo.setJoined( setJoin(user, motorcadeVo));
+        return motorcadeVo;
     }
 
     @Override
@@ -44,31 +48,28 @@ public class MotorcadeServiceImpl extends ServiceImpl<MotorcadeMapper, Motorcade
         if(userInfoIsNull!=null){
             UserVo user = userInfoIsNull.getUser();
             records.forEach( re -> {
-                setJoin(user, re);
+                re.setJoined(setJoin(user, re));
             } );
         }
 
         return motorcadeVoPage;
     }
 
-    private void setJoin(UserVo user, MotorcadeVo re) {
+    private Integer setJoin(UserVo user, MotorcadeVo re) {
         List<JoinedMotorcadeVo> joinedMotorcadeVos = re.getJoinedMotorcadeVos();
-        joinedMotorcadeVos.forEach( join -> {
-           if( join.getUserId().equals(user.getId())){
-               re.setJoined(1);
-               return;
-           }
-        } );
-        if(re.getJoined() == null){
-            re.setJoined(0);
+        for (JoinedMotorcadeVo joinedMotorcadeVo : joinedMotorcadeVos ){
+            if( joinedMotorcadeVo.getUserId().equals(user.getId())){
+                return JoinStatusEnum.JOINED.getCode();
+            }
         }
+        return JoinStatusEnum.NOT_JOINED.getCode();
     }
 
     @Override
     public MotorcadeVo getMotorcadeVo(Integer id) {
         UserVo user =(UserVo)UserLoginUtils.getUserInfo().getUser();
         MotorcadeVo motorcadeVo = motorcadeMapper.getMotorcadeVo(id);
-        setJoin(user, motorcadeVo);
+        motorcadeVo.setJoined( setJoin(user, motorcadeVo));
 
         return motorcadeVo;
     }

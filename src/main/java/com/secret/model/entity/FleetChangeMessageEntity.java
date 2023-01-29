@@ -64,7 +64,7 @@ public class FleetChangeMessageEntity implements Serializable {
 
     @ApiModelProperty(value = "创建人")
     @TableField("create_user")
-    private Integer createUser;
+    private String createUser;
 
     @ApiModelProperty(value = "修改时间")
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
@@ -72,7 +72,7 @@ public class FleetChangeMessageEntity implements Serializable {
 
     @ApiModelProperty(value = "修改人")
     @TableField("update_user")
-    private Integer updateUser;
+    private String updateUser;
 
 
 }

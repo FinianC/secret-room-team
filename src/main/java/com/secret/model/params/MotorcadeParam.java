@@ -35,7 +35,7 @@ public class MotorcadeParam {
 
     @ApiModelProperty(value = "拼场日期")
     @NotBlank
-    private String competitionDate;
+    private LocalDateTime competitionDate;
 
     @ApiModelProperty(value = "图片 json数组")
     private String pictures;

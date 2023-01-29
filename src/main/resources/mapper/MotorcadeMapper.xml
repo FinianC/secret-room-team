@@ -23,6 +23,7 @@
         <result column="header_img" property="headerImg"/>
         <result column="theme_id" property="themeId"/>
         <result column="theme_name" property="themeName"/>
+        <result column="mt_user_id" property="userId"/>
         <collection property="joinedMotorcadeVos" ofType="com.secret.model.vo.JoinedMotorcadeVo">
             <id column="jmt_id" property="id"/>
             <result column="motorcade_id" property="motorcadeId"/>
@@ -46,6 +47,7 @@
         mt.maximum_number  ,
         mt.clustering_number ,
         mt.already_existing ,
+        mt.user_id as  mt_user_id,
         mt.create_time  ,
         mt.create_user
     </sql>
@@ -112,8 +114,8 @@
         LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
         LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
         LEFT JOIN s_theme t ON t.id = mt.theme_id
-        LEFT JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
-        LEFT JOIN s_user u2 on jmt.user_id = u2.id
+        JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
+        JOIN s_user u2 on jmt.user_id = u2.id
         <where>
             <if test="param.title !=null and param.title != '' ">
                 and mt.title like concat('%',param.title,'%')
@@ -123,7 +125,9 @@
             </if>
         </where>
          and mt.delete_state = 0
+         and jmt.delete_state = 0
          and mt.status = 1
+        order by mt.create_time desc ,jmt.create_time asc
     </select>
     <select id="getMotorcadeVo" resultMap="motorcadeVo">
         SELECT
@@ -142,14 +146,9 @@
         LEFT JOIN s_theme t ON t.id = mt.theme_id
         LEFT JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
         LEFT JOIN s_user u2 on jmt.user_id = u2.id
-        <where>
-            <if test="param.title !=null and param.title != '' ">
-                and mt.title like concat('%',param.title,'%')
-            </if>
-            <if test="param.typeId != null">
-                and ft.id = param.typeId
-            </if>
-        </where>
+        where mt.id = #{id}
         and mt.delete_state = 0
+        and jmt.delete_state = 0
+        and mt.status = 1
     </select>
 </mapper>
