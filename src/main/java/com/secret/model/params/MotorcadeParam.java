@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -24,17 +26,17 @@ public class MotorcadeParam {
     private BigDecimal price;
 
     @ApiModelProperty(value = "主题")
+    @NotNull
     private Integer themeId;
 
     @ApiModelProperty(value = "车队类型 密室or剧本等等..")
-    @NotBlank
     private Integer typeId;
 
     @ApiModelProperty(value = "描述")
     private String description;
 
     @ApiModelProperty(value = "拼场日期")
-    @NotBlank
+    @NotNull
     private LocalDateTime competitionDate;
 
     @ApiModelProperty(value = "图片 json数组")
@@ -42,6 +44,7 @@ public class MotorcadeParam {
 
 
     @ApiModelProperty(value = "最大拼团人数")
+    @NotNull
     private Integer maximumNumber;
 
     @ApiModelProperty(value = "成团数")
