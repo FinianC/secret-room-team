@@ -12,7 +12,7 @@ public class MotorcadeQueryParam extends BasePageParam {
     @ApiModelProperty("标题")
     private String title;
 
-    @ApiModelProperty("车队类型")
-    private Integer typeId;
+    @ApiModelProperty("车队主题")
+    private Integer themeId;
     
 }
