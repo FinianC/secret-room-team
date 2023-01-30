@@ -74,7 +74,7 @@ public class FleetChangeMessageServiceImpl extends ServiceImpl<FleetChangeMessag
        FleetChangeMessageEntity fleetChangeMessageEntity = new FleetChangeMessageEntity();
        fleetChangeMessageEntity.setMessage(format);
        fleetChangeMessageEntity.setMotorcadeId(motorcadeVo.getId());
-       fleetChangeMessageEntity.setUserId(motorcadeVo.getCreateUser());
+       fleetChangeMessageEntity.setUserId(motorcadeVo.getUserId());
        fleetChangeMessageEntity.setType(code);
        return fleetChangeMessageEntity;
     }
