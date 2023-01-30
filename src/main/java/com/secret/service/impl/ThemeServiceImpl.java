@@ -1,13 +1,15 @@
 package com.secret.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.secret.mapper.TerrorLevelMapper;
 import com.secret.mapper.ThemeMapper;
-import com.secret.model.entity.TerrorLevelEntity;
 import com.secret.model.entity.ThemeEntity;
-import com.secret.service.TerrorLevelService;
+import com.secret.model.vo.ThemeVo;
 import com.secret.service.ThemeService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -20,4 +22,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ThemeServiceImpl extends ServiceImpl<ThemeMapper, ThemeEntity> implements ThemeService {
 
+    @Resource
+    private ThemeMapper themeMapper;
+
+    @Override
+    public List<ThemeVo> existsList() {
+        return  themeMapper.existsThemeList();
+    }
 }

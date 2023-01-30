@@ -42,5 +42,12 @@ public class ThemeController {
         return R.success(themeVos);
     }
 
+    @ApiOperation(value = "已存在主题列表", httpMethod = "GET")
+    @GetMapping("/existsList")
+    public R<List<ThemeVo>> existsList(){
+        List<ThemeVo> themeVos = themeService.existsList();
+        return R.success(themeVos);
+    }
+
 }
 
