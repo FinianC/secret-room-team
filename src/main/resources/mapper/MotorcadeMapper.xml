@@ -24,6 +24,31 @@
         <result column="theme_id" property="themeId"/>
         <result column="theme_name" property="themeName"/>
         <result column="mt_user_id" property="userId"/>
+        <collection property="joinedMotorcadeVos" ofType="com.secret.model.vo.JoinedMotorcadeVo" select="queryPeople" column="id"/>
+    </resultMap>
+
+    <resultMap id="motorcadeVoDetail" type="com.secret.model.vo.MotorcadeVo">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="price" property="price"/>
+        <result column="terror_level" property="terrorLevel"/>
+        <result column="type_id" property="typeId"/>
+        <result column="description" property="description"/>
+        <result column="competition_date" property="competitionDate"/>
+        <result column="pictures" property="pictures"/>
+        <result column="status" property="status"/>
+        <result column="maximum_number" property="maximumNumber"/>
+        <result column="clustering_number" property="clusteringNumber"/>
+        <result column="already_existing" property="alreadyExisting"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="type_name" property="typeName"/>
+        <result column="terror_level_name" property="terrorLevelName"/>
+        <result column="nickname" property="nickname"/>
+        <result column="header_img" property="headerImg"/>
+        <result column="theme_id" property="themeId"/>
+        <result column="theme_name" property="themeName"/>
+        <result column="mt_user_id" property="userId"/>
         <collection property="joinedMotorcadeVos" ofType="com.secret.model.vo.JoinedMotorcadeVo">
             <id column="jmt_id" property="id"/>
             <result column="motorcade_id" property="motorcadeId"/>
@@ -31,7 +56,6 @@
             <result column="u2_nickname" property="nickname"/>
             <result column="u2_header_img" property="headerImg"/>
         </collection>
-
     </resultMap>
 
     <sql id="mt">
@@ -94,12 +118,52 @@
             LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
             LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
             LEFT JOIN s_theme t ON t.id = mt.theme_id
-            LEFT JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
-            LEFT JOIN s_user u2 on jmt.user_id = u2.id
+            JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
+            JOIN s_user u2 on jmt.user_id = u2.id
         WHERE
             mt.id = #{id} and mt.delete_state = 0
     </select>
     <select id="getMotorcadeVoPage" resultMap="motorcadeVo">
+        SELECT
+        <include refid="mt"/>
+        , <include refid="ft"/>
+        ,<include refid="tl"/>
+        ,<include refid="u"/>
+        ,<include refid="t" />
+        FROM
+        s_motorcade mt
+        LEFT JOIN s_user u ON mt.user_id = u.id
+        LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
+        LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
+        LEFT JOIN s_theme t ON t.id = mt.theme_id
+        <where>
+            <if test="param.title !=null and param.title != '' ">
+                and mt.title like concat('%',#{param.title},'%')
+            </if>
+            <if test="param.themeId != null">
+                and mt.theme_id = #{param.themeId}
+            </if>
+        </where>
+         and mt.delete_state = 0
+         and mt.status = 1
+        order by mt.create_time desc
+    </select>
+    <select id="queryPeople" resultType="com.secret.model.vo.JoinedMotorcadeVo">
+        select
+             jmt.id,
+             jmt.motorcade_id,
+             u2.id as user_id ,
+             u2.nickname ,
+             u2.header_img
+        from
+            s_joined_motorcade jmt
+            JOIN s_user u2 on jmt.user_id = u2.id
+        where
+            jmt.motorcade_id = #{id}
+            and jmt.delete_state = 0
+            order by jmt.create_time asc
+    </select>
+    <select id="getMotorcadeVo" resultMap="motorcadeVoDetail">
         SELECT
         <include refid="mt"/>
         , <include refid="ft"/>
@@ -116,36 +180,6 @@
         LEFT JOIN s_theme t ON t.id = mt.theme_id
         JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
         JOIN s_user u2 on jmt.user_id = u2.id
-        <where>
-            <if test="param.title !=null and param.title != '' ">
-                and mt.title like concat('%',param.title,'%')
-            </if>
-            <if test="param.typeId != null">
-                and ft.id = param.typeId
-            </if>
-        </where>
-         and mt.delete_state = 0
-         and jmt.delete_state = 0
-         and mt.status = 1
-        order by mt.create_time desc ,jmt.create_time asc
-    </select>
-    <select id="getMotorcadeVo" resultMap="motorcadeVo">
-        SELECT
-        <include refid="mt"/>
-        , <include refid="ft"/>
-        ,<include refid="tl"/>
-        ,<include refid="u"/>
-        ,<include refid="jmt"/>
-        ,<include refid="u2"/>
-        ,<include refid="t" />
-        FROM
-        s_motorcade mt
-        LEFT JOIN s_user u ON mt.user_id = u.id
-        LEFT JOIN s_fleet_type ft ON mt.type_id = ft.id
-        LEFT JOIN s_terror_level tl ON mt.terror_level = tl.id
-        LEFT JOIN s_theme t ON t.id = mt.theme_id
-        LEFT JOIN s_joined_motorcade jmt on jmt.motorcade_id = mt.id
-        LEFT JOIN s_user u2 on jmt.user_id = u2.id
         where mt.id = #{id}
         and mt.delete_state = 0
         and jmt.delete_state = 0
