@@ -15,7 +15,6 @@ public class JoinedMotorcadeVo {
     private Integer id;
 
     @ApiModelProperty(value = "车队id")
-    @TableField("motorcade_id")
     private Integer motorcadeId;
 
     @ApiModelProperty(value = "用户id")
