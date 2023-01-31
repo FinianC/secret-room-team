@@ -90,6 +90,7 @@ public class UserController {
         UserEntity byId = userService.getById(userEntity.getId());
         TransferUtils.transferBean(byId,user);
         userInfo.setUser(user);
+        RedisUtils.set(userInfo.getToken(),userInfo);
         return R.success(userInfo);
     }
 
@@ -107,6 +108,7 @@ public class UserController {
         UserVo user = userInfo.getUser();
         UserEntity byId = userService.getById(user.getId());
         TransferUtils.transferBean(byId,user);
+
         return R.success(userInfo);
     }
 
