@@ -5,12 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NonNull;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @ApiModel("用户修改参数")
 public class UserModifyParam {
 
     @ApiModelProperty(value = "id")
-    @NonNull
+    @NotNull
     private Integer id;
 
     @ApiModelProperty(value = "昵称")

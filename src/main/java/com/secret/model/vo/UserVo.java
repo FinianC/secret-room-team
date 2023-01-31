@@ -30,9 +30,6 @@ public class UserVo {
     @ApiModelProperty(value = "微信号")
     private String wechatNumber;
 
-    @ApiModelProperty(value = "权限 1仅拼团 2发布拼团")
-    private Integer role;
-
     @ApiModelProperty(value = "性别 0保密  1女 2男")
     private Integer sex;
 
