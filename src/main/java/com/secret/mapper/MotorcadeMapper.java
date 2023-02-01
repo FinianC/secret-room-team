@@ -20,7 +20,7 @@ public interface MotorcadeMapper extends BaseMapper<MotorcadeEntity> {
 
      MotorcadeVo getMotorcadeVoById(Integer id);
 
-     Page<MotorcadeVo> getMotorcadeVoPage(@Param("page") Page page, @Param("param")MotorcadeQueryParam motorcadeQueryParam);
+     Page<MotorcadeVo> getMotorcadeVoPage(@Param("page") Page page, @Param("param")MotorcadeQueryParam motorcadeQueryParam,@Param("status") Integer status );
 
      MotorcadeVo getMotorcadeVo(@Param("id")Integer id);
 }

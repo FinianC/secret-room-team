@@ -143,10 +143,13 @@
             <if test="param.themeId != null">
                 and mt.theme_id = #{param.themeId}
             </if>
+            <if test="status != null">
+                and mt.status = #{status}
+            </if>
+            and mt.delete_state = 0
+            order by mt.create_time desc
         </where>
-         and mt.delete_state = 0
-         and mt.status = 1
-        order by mt.create_time desc
+
     </select>
     <select id="queryPeople" resultType="com.secret.model.vo.JoinedMotorcadeVo">
         select

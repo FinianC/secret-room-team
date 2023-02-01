@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.model.entity.MotorcadeEntity;
 import com.secret.mapper.MotorcadeMapper;
 import com.secret.model.enums.JoinStatusEnum;
+import com.secret.model.enums.MotorcadeStatusEnum;
 import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.*;
@@ -43,7 +44,7 @@ public class MotorcadeServiceImpl extends ServiceImpl<MotorcadeMapper, Motorcade
     public Page<MotorcadeVo> getMotorcadeVoPage(MotorcadeQueryParam motorcadeQueryParam) {
         UserVerificationVo<UserVo> userInfoIsNull = UserLoginUtils.getUserInfoIsNull();
         Page page = new Page<>(motorcadeQueryParam.getCurrent(), motorcadeQueryParam.getPageSize());
-        Page<MotorcadeVo> motorcadeVoPage = motorcadeMapper.getMotorcadeVoPage(page, motorcadeQueryParam);
+        Page<MotorcadeVo> motorcadeVoPage = motorcadeMapper.getMotorcadeVoPage(page, motorcadeQueryParam, MotorcadeStatusEnum.HAVE_IN_HAND.getCode());
         List<MotorcadeVo> records = motorcadeVoPage.getRecords();
         if(userInfoIsNull!=null){
             UserVo user = userInfoIsNull.getUser();
