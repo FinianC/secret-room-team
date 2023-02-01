@@ -2,6 +2,7 @@ package com.secret.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.constant.RS;
 import com.secret.model.entity.GroupChatEntity;
@@ -9,6 +10,7 @@ import com.secret.model.entity.UserEntity;
 import com.secret.model.enums.MotorcadeStatusEnum;
 import com.secret.model.enums.UserRoleEnum;
 import com.secret.model.entity.MotorcadeEntity;
+import com.secret.model.params.MotorcadeCompleteParam;
 import com.secret.model.params.MotorcadeModifyParam;
 import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
@@ -95,6 +97,15 @@ public class MotorcadeController {
         motorcadeService.updateById(motorcadeEntity);
         MotorcadeVo motorcadeVo = motorcadeService.getMotorcadeVoById(motorcadeEntity.getId());
         return R.success(motorcadeVo);
+    }
+
+    @ApiOperation(value = "拼车完成", httpMethod = "POST")
+    @PostMapping("/user/complete")
+    public R complete(@RequestBody MotorcadeCompleteParam motorcadeCompleteParam) {
+        motorcadeService.update(new LambdaUpdateWrapper<MotorcadeEntity>()
+                .eq(MotorcadeEntity::getId,motorcadeCompleteParam.getId())
+                .set(MotorcadeEntity::getStatus,MotorcadeStatusEnum.SUCCESS.getCode()));
+        return R.success();
     }
 
     @ApiOperation(value = "分页查询大厅车队信息", httpMethod = "POST")
