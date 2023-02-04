@@ -9,8 +9,8 @@
             s_group_chat_member gcm
             JOIN s_group_chat gc ON gc.id = gcm.group_id
         WHERE
-            gc.id = {chatId}
-            AND gcm.user_id = {userId}
+            gc.id = #{chatId}
+            AND gcm.user_id = #{userId}
             AND gcm.delete_state = 0
     </select>
     <select id="getMemberHeadPortrait" resultType="java.lang.String">
