@@ -12,6 +12,7 @@
         <result property="content" column="content"/>
         <result property="messageTypeId" column="message_type_id"/>
         <result property="createTime" column="create_time"/>
+        <result property="displayTime" column="display_time"/>
     </resultMap>
     <sql id="gmc">
         gmc.id ,
@@ -19,6 +20,7 @@
         gmc.content ,
         gmc.message_type_id ,
         gmc.member_id ,
+        gmc.display_time ,
         gmc.create_time
     </sql>
 
@@ -54,5 +56,6 @@
         WHERE
             gmc.group_id = #{chatId}
             AND gmc.delete_state = 0 and gcm.delete_state =0
+            order by gmc.create_time desc
     </select>
 </mapper>

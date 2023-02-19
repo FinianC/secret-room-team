@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.github.binarywang.java.emoji.EmojiConverter;
 import com.secret.constant.RS;
 import com.secret.model.dto.User;
-import com.secret.model.entity.GroupChatEntity;
-import com.secret.model.entity.GroupChatMemberEntity;
-import com.secret.model.entity.GroupMsgContentEntity;
-import com.secret.model.entity.MotorcadeEntity;
+import com.secret.model.dto.WebSocketCommand;
+import com.secret.model.entity.*;
 import com.secret.model.enums.ChatListCommandEnum;
 import com.secret.model.enums.GroupMessageEnum;
 import com.secret.model.enums.WSClientTypeEnum;
@@ -19,14 +17,16 @@ import com.secret.model.vo.GroupMessageVo;
 import com.secret.model.vo.GroupMsgContentVo;
 import com.secret.model.vo.UserVo;
 import com.secret.service.*;
-import com.secret.utils.DateUtil;
-import com.secret.utils.TransferUtils;
-import com.secret.utils.UserLoginUtils;
+import com.secret.utils.*;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.user.SimpUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
@@ -34,15 +34,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 import java.io.IOException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -57,16 +60,11 @@ public class WsController {
 
 
     @Autowired
-    private MotorcadeService motorcadeService;
-
-    @Autowired
     GroupMsgContentService groupMsgContentService;
 
     @Autowired
     private GroupChatService groupChatService;
 
-    @Autowired
-    private JoinedMotorcadeService joinedMotorcadeService;
 
     @Autowired
     private GroupChatMemberService groupChatMemberService;
@@ -74,8 +72,7 @@ public class WsController {
 
     EmojiConverter emojiConverter = EmojiConverter.getInstance();
 
-    @Autowired
-    private SimpUserRegistry userRegistry;
+
 
     SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
@@ -84,8 +81,8 @@ public class WsController {
      */
     @MessageMapping("/chat/{chatId}")
     @Transactional
-    public void handleGroupMessage( User u,@DestinationVariable Integer chatId ,GroupMsgContentParam groupMsgContent){
-      UserVo user = (UserVo) UserLoginUtils.getUserInfo(u.getUsername()).getUser();
+    public void handleGroupMessage(@Header String token , @DestinationVariable Integer chatId , GroupMsgContentParam groupMsgContent){
+      UserVo user = (UserVo) UserLoginUtils.getUserInfo(token).getUser();
       GroupChatEntity groupChatEntity  = groupChatService.getById(chatId);
       Assert.notNull(groupChatEntity, RS.GROUP_CHAT_NOT_EXIST.message());
 
@@ -97,9 +94,17 @@ public class WsController {
         GroupChatMemberEntity groupChatMemberEntity = groupChatMemberService.getOne(new LambdaQueryWrapper<GroupChatMemberEntity>()
                 .eq(GroupChatMemberEntity::getUserId, user.getId())
                 .eq(GroupChatMemberEntity::getGroupId, groupChatEntity.getId()));
-
+        LocalDateTime now = DateUtil.now();
+        /**
+         *  查询20分钟前的显示时间 如果有 则当前消息与前面共享显示时间 如果无则设置当前时间为显示时间
+          */
+        LocalDateTime localDateTime = now.minusMinutes(20);
+        int count = groupMsgContentService.count(new LambdaQueryWrapper<GroupMsgContentEntity>().eq(GroupMsgContentEntity::getGroupId,chatId).gt(GroupMsgContentEntity::getDisplayTime, localDateTime));
+        if(count<1){
+            groupMsgContentEntity.setDisplayTime(now);
+        }
         groupMsgContentEntity.setGroupId(chatId);
-      groupMsgContentEntity.setCreateTime(DateUtil.now());
+      groupMsgContentEntity.setCreateTime(now);
       groupMsgContentEntity.setMemberId(groupChatMemberEntity.getId());
       //保存该条群聊消息记录到数据库中
       groupMsgContentService.save(groupMsgContentEntity);
@@ -113,8 +118,15 @@ public class WsController {
         groupMsgContentVo.setMotorcadeId(groupChatEntity.getMotorcadeId());
         // 更新聊天框
         toUpdateChatList(chatId);
+        String destination = "/topic/chat/"+chatId;
         //转发该条数据
-      simpMessagingTemplate.convertAndSend("/topic/chat/"+chatId,groupMsgContentVo);
+        simpMessagingTemplate.convertAndSend(destination,groupMsgContentVo);
+    }
+
+    @SubscribeMapping("/topic/test")
+    public String subscribeTopic(){
+        System.out.println("被订阅...");
+        return "订阅成功";
     }
 
     /**
@@ -122,34 +134,25 @@ public class WsController {
      * @param chatId
      */
     public void toUpdateChatList(Integer chatId){
-        List<Integer> uIdByCId = groupChatMemberService.getUIdByCId(chatId);
-        List<SimpUser> simpUsers = userRegistry.getUsers().stream().filter(simpUser -> {
-            User principal = (User) simpUser.getPrincipal();
-            return WSClientTypeEnum.CHAT_LIST.getCode().equals(principal.getType()) && uIdByCId.contains(principal.getId());
-        }).collect(Collectors.toList());
-        if(!CollectionUtils.isEmpty(simpUsers)){
-            simpUsers.forEach( uId -> {
-                User uId1 = (User) uId.getPrincipal();
-                ChatListVo chatByUIdAndCId = groupChatService.getChatByUIdAndCId(uId1.getId(), chatId);
-                simpMessagingTemplate.convertAndSendToUser(uId.getName(), "/toUpdate/chatList",chatByUIdAndCId);
-            });
-        }
+        List<UserEntity> userEntities = groupChatMemberService.getUOpenIdByCId(chatId);
+        userEntities.forEach( user -> {
+            String token = RedisUtils.get(user.getOpenId(), String.class);
+            if(StringUtils.isNotEmpty(token)){
+                ChatListVo chatByUIdAndCId = groupChatService.getChatByUIdAndCId(user.getId(), chatId);
+                simpMessagingTemplate.convertAndSendToUser(token, "/toUpdate/chatList",chatByUIdAndCId);
+            }
+        } );
     }
 
 
     /**
      * 接收用户信息
      * */
-//    @MessageMapping(value = "/principal")
-//    public void test(Principal principal) {
-//        log.info("当前在线人数:" + userRegistry.getUserCount());
-//        int i = 1;
-//        for (SimpUser user : userRegistry.getUsers()) {
-//            log.info("用户" + i++ + "---" + user);
-//        }
-//        //发送消息给指定用户
-//        simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/message","服务器主动推的数据");
-//    }
+    @MessageMapping(value = "/principal")
+    public void principal(@Header String token, WebSocketCommand webSocketCommand) {
+        User user = WebSocketUser.getConcurrentHashMap().remove(token);
+
+    }
 
   /**
    * 更新

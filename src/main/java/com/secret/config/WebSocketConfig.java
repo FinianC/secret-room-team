@@ -1,5 +1,6 @@
 package com.secret.config;
 
+import com.secret.interceptor.ExtHandshakeInterceptor;
 import com.secret.interceptor.UserInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.server.HandshakeInterceptor;
 
 /**
  * @author Hai
@@ -32,6 +34,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
 
     registry.addEndpoint(endpoint).setAllowedOrigins("http://127.0.0.1:5501").withSockJS();
+    registry.addEndpoint(endpoint+"Mini").addInterceptors(createExtHandshakeInterceptor())
+            .setAllowedOrigins("*");
 
   }
 
@@ -41,7 +45,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
     // 订阅Broker名称
-    registry.enableSimpleBroker("/queue", "/topic");
+    registry.enableSimpleBroker("/queue", "/topic","/user");
     // 全局使用的消息前缀（客户端订阅路径上会体现出来）
     registry.setApplicationDestinationPrefixes("/app");
     // 点对点使用的订阅前缀（客户端订阅路径上会体现出来），不设置的话，默认也是/user/
@@ -62,6 +66,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   @Bean
   public UserInterceptor createUserInterceptor() {
     return new UserInterceptor();
+  }
+
+  public ExtHandshakeInterceptor createExtHandshakeInterceptor() {
+    return new ExtHandshakeInterceptor();
   }
 
 

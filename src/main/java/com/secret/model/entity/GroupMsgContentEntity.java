@@ -49,6 +49,10 @@ public class GroupMsgContentEntity implements Serializable {
     @TableField("message_type_id")
     private Integer messageTypeId;
 
+    @ApiModelProperty(value = "显示时间")
+    @TableField("display_time")
+    private LocalDateTime displayTime;
+
     @ApiModelProperty(value = "删除状态")
     @TableField("delete_state")
     @TableLogic

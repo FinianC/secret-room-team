@@ -2,6 +2,8 @@ package com.secret.service;
 
 import com.secret.model.entity.GroupChatMemberEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.secret.model.entity.UserEntity;
+import com.secret.model.vo.UserVo;
 
 import java.util.List;
 
@@ -55,10 +57,17 @@ public interface GroupChatMemberService extends IService<GroupChatMemberEntity> 
     Boolean leaveGroupChat(Integer userId, Integer chatId);
 
     /**
-     * 根据群id获取userId
+     * 根据群成员id获取userId
      * @param chatId
      * @return
      */
     List<Integer> getUIdByCId(Integer chatId);
+
+    /**
+     * 根据群成员获取openid
+     * @param chatId
+     * @return
+     */
+    List<UserEntity> getUOpenIdByCId(Integer chatId);
 
 }

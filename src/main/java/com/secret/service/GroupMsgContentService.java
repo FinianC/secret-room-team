@@ -18,7 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public interface GroupMsgContentService extends IService<GroupMsgContentEntity> {
 
-   Integer getMaxIdByMotorcadeId(Integer motorcadeId);
+   /**
+    * 根据聊天室 获取最新消息id
+    * @param chatId
+    * @return
+    */
+   Integer getMaxIdByMotorcadeId(Integer chatId);
 
    /**
     *  获取当前未读消息数量

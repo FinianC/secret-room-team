@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 /**
  * <p>
  * 群聊消息 服务实现类
@@ -56,6 +58,7 @@ public class GroupMsgContentServiceImpl extends ServiceImpl<GroupMsgContentMappe
     @Override
     public Page<GroupMsgContentVo> pageByChatId(Page page, Integer chatId) {
         Page<GroupMsgContentVo> groupMsgContentVoPage = groupMsgContentMapper.pageByChatId(page, chatId);
+        Collections.reverse(groupMsgContentVoPage.getRecords());
         return groupMsgContentVoPage;
     }
 

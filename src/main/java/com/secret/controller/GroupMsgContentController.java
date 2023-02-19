@@ -1,9 +1,13 @@
 package com.secret.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.constant.RS;
+import com.secret.model.entity.GroupChatMemberEntity;
 import com.secret.model.params.GroupMsgContentQueryParam;
+import com.secret.model.params.UpdateReadingRecordsParam;
 import com.secret.model.vo.GroupMsgContentVo;
 import com.secret.model.vo.R;
 import com.secret.model.vo.UserVo;
@@ -46,6 +50,20 @@ public class GroupMsgContentController {
         Assert.isTrue(groupMember, RS.GROUP_CHAT_NOT_EXIST.message());
         Page page = new Page<>(groupMsgContentQueryParam.getCurrent(), groupMsgContentQueryParam.getPageSize());
        return R.success(groupMsgContentService.pageByChatId(page,groupMsgContentQueryParam.getGroupChatId()));
+    }
+
+    @ApiOperation(value = "更新最新消息读取标记", httpMethod = "POST")
+    @PostMapping("/updateReadingRecords")
+    public  R updateReadingRecords( @RequestBody UpdateReadingRecordsParam updateReadingRecordsParam){
+        UserVo user = (UserVo) UserLoginUtils.getUserInfo().getUser();
+        Integer groupChatId = updateReadingRecordsParam.getGroupChatId();
+        Integer maxIdByMotorcadeId = groupMsgContentService.getMaxIdByMotorcadeId(groupChatId);
+        groupChatMemberService.update(new LambdaUpdateWrapper<GroupChatMemberEntity>()
+                .set(GroupChatMemberEntity::getLastMessageId,maxIdByMotorcadeId)
+                .eq(GroupChatMemberEntity::getGroupId,groupChatId)
+                .eq(GroupChatMemberEntity::getUserId,user.getId())
+                .ne(GroupChatMemberEntity::getLastMessageId,maxIdByMotorcadeId));
+        return R.success();
     }
 
 }

@@ -23,7 +23,7 @@
             gcm.group_id = #{chatId}
             AND gcm.delete_state = 0
     </select>
-    <select id="getUIdByCId" resultType="java.lang.Integer">
-        select gcm.user_id from s_group_chat_member gcm where gcm.group_id = #{chatId} and gcm.delete_state = 0
+    <select id="getUOpenIdByCId" resultType="com.secret.model.entity.UserEntity">
+        select u.id , u.open_id from s_group_chat_member gcm join s_user u on u.id = gcm.user_id  where gcm.group_id = #{chatId} and gcm.delete_state = 0
     </select>
 </mapper>

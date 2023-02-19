@@ -2,6 +2,8 @@ package com.secret.mapper;
 
 import com.secret.model.entity.GroupChatMemberEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.secret.model.entity.UserEntity;
+import com.secret.model.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,10 +29,5 @@ public interface GroupChatMemberMapper extends BaseMapper<GroupChatMemberEntity>
      */
     List<String> getMemberHeadPortrait(@Param("chatId") Integer chatId);
 
-    /**
-     * 根据群id获取userId
-     * @param chatId
-     * @return
-     */
-    List<Integer> getUIdByCId(@Param("chatId") Integer chatId);
+    List<UserEntity> getUOpenIdByCId(@Param("chatId") Integer chatId);
 }

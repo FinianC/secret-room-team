@@ -35,6 +35,9 @@ public class GroupMsgContentVo {
     @ApiModelProperty(value = "消息类型id")
     private Integer messageTypeId;
 
+    @ApiModelProperty(value = "显示时间")
+    private LocalDateTime displayTime;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 
