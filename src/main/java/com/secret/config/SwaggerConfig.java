@@ -82,10 +82,10 @@ public class SwaggerConfig {
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("OEP API Documentation.")
-				.description("The API documentation for OEP.")
+				.title("Secret Room API Documentation.")
+				.description("The API documentation for secret room.")
 				.version("1.0.0")
-				.contact(new Contact("Myles", "https://gitee.com/wenxinji", "myles.yang@foxmail.com"))
+				.contact(new Contact("Finian", "https://github.com/FinianC/secret-room-team", "13923557263@163.com"))
 				.license("MIT")
 				.licenseUrl("")
 				.build();

@@ -3,3 +3,4 @@
 /secret-room.iml
 /.idea/
 /src/main/resources/application-dev.yml
+/log/
