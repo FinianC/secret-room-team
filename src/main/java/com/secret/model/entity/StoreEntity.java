@@ -46,8 +46,8 @@ public class StoreEntity implements Serializable {
     private String content;
 
     @ApiModelProperty(value = "图片")
-    @TableField("pictures")
-    private String pictures;
+    @TableField("picture")
+    private String picture;
 
     @ApiModelProperty(value = "电话")
     @TableField("phone")
@@ -64,6 +64,10 @@ public class StoreEntity implements Serializable {
     @ApiModelProperty(value = "区")
     @TableField("region")
     private String region;
+
+    @ApiModelProperty(value = "详细地址")
+    @TableField("address")
+    private String address;
 
     @ApiModelProperty(value = "删除标记")
     @TableField("delete_state")

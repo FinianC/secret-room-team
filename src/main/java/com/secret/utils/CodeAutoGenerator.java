@@ -41,13 +41,13 @@ public class CodeAutoGenerator {
 		String moduleName = "secret";
 //		String[] tableNamesToGenerate = scanner("表名，多个英文逗号分割").split(",");
 		 String[] tableNamesToGenerate = {
-				"s_theme"
+				"s_store","s_ticket"
 		 };
 		// 代码生成器
 		AutoGenerator mpg = new AutoGenerator();
 
 		// 项目根目录
-		String projectPath = "E:\\idea_code\\card-voucher\\secret-room-team";
+		String projectPath = "D:\\ideaCode\\secret-room-team";
 
 		//// 全局配置
 		GlobalConfig gc = new GlobalConfig();
@@ -73,7 +73,7 @@ public class CodeAutoGenerator {
 				.setUrl("jdbc:mysql://127.0.0.1:3306/secret_room?useSSL=false&useUnicode=true"
 						+ "&characterEncoding=UTF8&serverTimezone=Asia/Shanghai")
 				.setUsername("root")
-				.setPassword("1804123028");
+				.setPassword("123456");
 		mpg.setDataSource(dsc);
 
 

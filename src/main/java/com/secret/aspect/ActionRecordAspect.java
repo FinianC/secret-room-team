@@ -81,7 +81,6 @@ public class ActionRecordAspect {
 			} catch (Exception e) {
 				log.error("内容EL表达式解析错误:{}", content);
 				e.printStackTrace();
-				return;
 			}
 		}
 

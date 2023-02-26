@@ -9,7 +9,7 @@
         <result column="theme_id" property="themeId"/>
         <result column="price" property="price"/>
         <result column="original_price" property="originalPrice"/>
-        <result column="pictures" property="pictures"/>
+        <result column="picture" property="picture"/>
         <result column="store_id" property="storeId"/>
         <result column="purchase_instructions" property="purchaseInstructions"/>
         <result column="introduce" property="introduce"/>
@@ -18,6 +18,14 @@
         <result column="sold" property="sold"/>
         <result column="create_time" property="createTime"/>
         <result column="theme_name" property="themeName"/>
+        <association property="storeVo" javaType="com.secret.model.vo.StoreVo">
+            <id column="store_id" property="id"/>
+            <result column="store_name" property="name"/>
+            <result column="province" property="province"/>
+            <result column="city" property="city"/>
+            <result column="region" property="region"/>
+            <result column="address" property="address"/>
+        </association>
     </resultMap>
     <sql id="tk">
         tk.id ,
@@ -26,7 +34,7 @@
         tk.theme_id  ,
         tk.price ,
         tk.original_price,
-        tk.pictures ,
+        tk.picture ,
         tk.store_id ,
         tk.purchase_instructions,
         tk.introduce,
@@ -37,9 +45,17 @@
     <sql id="tm">
         tm.name as theme_name
     </sql>
+    <sql id="store">
+        store.id as store_id ,
+        store.name as store_name ,
+        store.province  ,
+        store.city ,
+        store.region ,
+        store.address
+    </sql>
 
     <select id="page" resultMap="ticketVo">
-        select * from s_ticket tk join s_theme tm on tm.id = tk.them_id
+        select <include refid="tk"/> , <include refid="tm"/> , <include refid="store"/> from s_ticket tk join s_theme tm on tm.id = tk.theme_id join s_store store on store.id = tk.store_id
         <where>
             <if test="ticketQueryParam.themeId !=null  ">
                and tm.id = #{ticketQueryParam.themeId}

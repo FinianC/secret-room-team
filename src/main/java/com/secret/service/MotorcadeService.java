@@ -3,11 +3,9 @@ package com.secret.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.model.entity.MotorcadeEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.ChatListVo;
 import com.secret.model.vo.MotorcadeVo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

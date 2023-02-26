@@ -25,7 +25,7 @@ public class TicketVo {
     private Integer themeId;
 
     @ApiModelProperty(value = "主题名称")
-    private Integer themeName;
+    private String themeName;
 
     @ApiModelProperty(value = "现价")
     private BigDecimal price;
@@ -33,8 +33,8 @@ public class TicketVo {
     @ApiModelProperty(value = "原价")
     private BigDecimal originalPrice;
 
-    @ApiModelProperty(value = "图片数组")
-    private String pictures;
+    @ApiModelProperty(value = "封面图")
+    private String picture;
 
     @ApiModelProperty(value = "门店id")
     private Integer storeId;
@@ -57,5 +57,8 @@ public class TicketVo {
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "密室店铺")
+    private StoreVo storeVo;
 
 }

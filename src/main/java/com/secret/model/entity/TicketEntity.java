@@ -54,9 +54,9 @@ public class TicketEntity implements Serializable {
     @TableField("original_price")
     private BigDecimal originalPrice;
 
-    @ApiModelProperty(value = "图片")
-    @TableField("pictures")
-    private String pictures;
+    @ApiModelProperty(value = "封面图")
+    @TableField("picture")
+    private String picture;
 
     @ApiModelProperty(value = "门店id")
     @TableField("store_id")

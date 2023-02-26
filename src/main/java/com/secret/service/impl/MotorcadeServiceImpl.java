@@ -5,14 +5,11 @@ import com.secret.model.entity.MotorcadeEntity;
 import com.secret.mapper.MotorcadeMapper;
 import com.secret.model.enums.JoinStatusEnum;
 import com.secret.model.enums.MotorcadeStatusEnum;
-import com.secret.model.params.MotorcadeParam;
 import com.secret.model.params.MotorcadeQueryParam;
 import com.secret.model.vo.*;
 import com.secret.service.MotorcadeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.secret.utils.UserLoginUtils;
-import io.swagger.annotations.ApiModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,9 +45,8 @@ public class MotorcadeServiceImpl extends ServiceImpl<MotorcadeMapper, Motorcade
         List<MotorcadeVo> records = motorcadeVoPage.getRecords();
         if(userInfoIsNull!=null){
             UserVo user = userInfoIsNull.getUser();
-            records.forEach( re -> {
-                re.setJoined(setJoin(user, re));
-            } );
+            records.forEach( (re) ->  re.setJoined(setJoin(user, re))
+             );
         }
 
         return motorcadeVoPage;

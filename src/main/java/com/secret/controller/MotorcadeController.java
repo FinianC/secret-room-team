@@ -1,7 +1,6 @@
 package com.secret.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.secret.constant.RS;
@@ -20,17 +19,11 @@ import com.secret.model.vo.UserVo;
 import com.secret.service.*;
 import com.secret.utils.TransferUtils;
 import com.secret.utils.UserLoginUtils;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-
 /**
  * <p>
  * 车队 前端控制器
@@ -64,13 +57,12 @@ public class MotorcadeController {
     public R<MotorcadeVo> updateInformation(@RequestBody MotorcadeParam motorcadeParam) {
         UserVo user = (UserVo)UserLoginUtils.getUserInfo().getUser();
         UserEntity userEntity = userService.getById(user.getId());
-        Assert.isTrue(UserRoleEnum.RELEASE_GROUP.getCode() == userEntity.getRole(), RS.NO_PUBLISHING_PERMISSION.message());
+        Assert.isTrue(UserRoleEnum.RELEASE_GROUP.getCode().equals(userEntity.getRole()) , RS.NO_PUBLISHING_PERMISSION.message());
         MotorcadeEntity motorcadeEntity = new MotorcadeEntity();
         TransferUtils.transferBean(motorcadeParam,motorcadeEntity);
         motorcadeEntity.setUserId(user.getId());
         motorcadeEntity.setStatus(MotorcadeStatusEnum.HAVE_IN_HAND.getCode());
         motorcadeEntity.setClusteringNumber(motorcadeParam.getMaximumNumber());
-//        motorcadeEntity.setCompetitionDate();
         motorcadeService.save(motorcadeEntity);
         MotorcadeVo motorcadeVo=new MotorcadeVo();
         TransferUtils.transferBean(motorcadeEntity,motorcadeVo);
@@ -101,11 +93,11 @@ public class MotorcadeController {
 
     @ApiOperation(value = "拼车完成", httpMethod = "POST")
     @PostMapping("/user/complete")
-    public R complete(@RequestBody MotorcadeCompleteParam motorcadeCompleteParam) {
+    public R<String> complete(@RequestBody MotorcadeCompleteParam motorcadeCompleteParam) {
         motorcadeService.update(new LambdaUpdateWrapper<MotorcadeEntity>()
                 .eq(MotorcadeEntity::getId,motorcadeCompleteParam.getId())
                 .set(MotorcadeEntity::getStatus,MotorcadeStatusEnum.SUCCESS.getCode()));
-        return R.success();
+        return R.success("");
     }
 
     @ApiOperation(value = "分页查询大厅车队信息", httpMethod = "POST")

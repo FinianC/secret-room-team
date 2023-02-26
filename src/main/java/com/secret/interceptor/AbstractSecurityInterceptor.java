@@ -20,7 +20,7 @@ public abstract class AbstractSecurityInterceptor {
 	 */
 	protected List<String> excludePatterns;
 
-	public AbstractSecurityInterceptor() {
+	protected AbstractSecurityInterceptor() {
 		this.pathPatterns = new ArrayList<>();
 		this.excludePatterns = new ArrayList<>();
 	}

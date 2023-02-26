@@ -32,7 +32,7 @@ public @interface ActionRecord {
 	/**
 	 * 操作类型
 	 */
-	// LogType type() default LogType.COMMON;
+	//
 
 	/**
 	 * 生效条件的EL表达式<p>
