@@ -8,6 +8,7 @@ import com.secret.model.vo.FileVo;
 import com.secret.model.vo.R;
 import com.secret.service.FileService;
 import com.secret.utils.TransferUtils;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

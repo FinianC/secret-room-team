@@ -25,6 +25,10 @@
             <result column="city" property="city"/>
             <result column="region" property="region"/>
             <result column="address" property="address"/>
+            <result  column="st_description" property="description"/>
+            <result  column="content" property="content"/>
+            <result  column="st_picture" property="picture"/>
+            <result  column="phone" property="phone"/>
         </association>
     </resultMap>
     <sql id="tk">
@@ -36,11 +40,13 @@
         tk.original_price,
         tk.picture ,
         tk.store_id ,
-        tk.purchase_instructions,
-        tk.introduce,
         tk.stock,
         tk.sold,
         tk.create_time
+    </sql>
+    <sql id="tk_detail">
+        tk.purchase_instructions,
+        tk.introduce
     </sql>
     <sql id="tm">
         tm.name as theme_name
@@ -54,6 +60,9 @@
         store.address
     </sql>
 
+    <sql id="store_detail">
+        store.phone
+    </sql>
     <select id="page" resultMap="ticketVo">
         select <include refid="tk"/> , <include refid="tm"/> , <include refid="store"/> from s_ticket tk join s_theme tm on tm.id = tk.theme_id join s_store store on store.id = tk.store_id
         <where>
@@ -65,6 +74,11 @@
             </if>
             and tk.delete_state = 0
         </where>
-
+        order by tk.create_time desc
+    </select>
+    <select id="detailById" resultMap="ticketVo">
+        select <include refid="tk"/> ,<include refid="tk_detail"/>, <include refid="tm"/> , <include refid="store"/>,<include
+            refid="store_detail"/> from s_ticket tk join s_theme tm on tm.id = tk.theme_id join s_store store on store.id = tk.store_id
+        where tk.id = #{id} and tk.delete_state = 0
     </select>
 </mapper>

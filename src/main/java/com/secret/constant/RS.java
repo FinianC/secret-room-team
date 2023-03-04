@@ -61,6 +61,22 @@ public enum RS {
 	INSUFFICIENT_PERMISSIONS(2008,"暂无操作权限"),
 
 	MEMBER_NOT_FOUND(2009,"未找到该成员"),
+
+
+	TICKET_NOT_FOUND(2010,"未找到密室"),
+
+	DO_NOT_REPEAT_PURCHASE(2011,"请勿重复购买"),
+	PURCHASE_FAILED(2012,"购买失败"),
+
+	DO_NOT_PAY_REPEATEDLY(2013,"请勿重复支付"),
+
+	ORDER_ERROR(2014,"订单错误"),
+	PAYMENT_FAILED(2015,"支付失败"),
+
+
+	REFUND_ERROR(2016,"退款失败")
+
+
 	;
 
 	private final int status;

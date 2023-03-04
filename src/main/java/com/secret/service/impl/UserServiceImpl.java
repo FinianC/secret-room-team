@@ -1,5 +1,6 @@
 package com.secret.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.secret.model.entity.UserEntity;
 import com.secret.mapper.UserMapper;
 import com.secret.service.UserService;
@@ -17,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> implements UserService {
 
+    @Override
+    public String getOpenIdById(Integer userId) {
+       return getOne(new LambdaQueryWrapper<UserEntity>().select(UserEntity::getOpenId).eq(UserEntity::getId, userId)).getOpenId();
+    }
 }

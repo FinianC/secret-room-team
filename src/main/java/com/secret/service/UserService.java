@@ -13,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<UserEntity> {
 
+    /**
+     * 获取openid
+     * @param userId
+     * @return
+     */
+    String getOpenIdById(Integer userId);
+
 }

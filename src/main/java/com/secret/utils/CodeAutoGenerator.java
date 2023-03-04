@@ -41,7 +41,7 @@ public class CodeAutoGenerator {
 		String moduleName = "secret";
 //		String[] tableNamesToGenerate = scanner("表名，多个英文逗号分割").split(",");
 		 String[] tableNamesToGenerate = {
-				"s_store","s_ticket"
+				"s_refund_record"
 		 };
 		// 代码生成器
 		AutoGenerator mpg = new AutoGenerator();

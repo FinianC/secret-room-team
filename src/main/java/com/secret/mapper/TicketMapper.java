@@ -22,5 +22,12 @@ public interface TicketMapper extends BaseMapper<TicketEntity> {
      * @param ticketQueryParam
      * @return
      */
-    Page<TicketVo> page(@Param("page")Page page ,@Param("ticketQueryParam") TicketQueryParam ticketQueryParam);
+    Page<TicketVo> page(@Param("page")Page<TicketEntity> page ,@Param("ticketQueryParam") TicketQueryParam ticketQueryParam);
+
+    /**
+     * 根据id查询详情
+     * @param id
+     * @return
+     */
+    TicketVo detailById(Integer id);
 }

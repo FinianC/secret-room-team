@@ -23,7 +23,7 @@ public class RedisUtils {
 
 	private static RedisTemplate<String, Object> redisTemplate;
 
-	public static final String LOCK_PREFIX = "indent_lock";
+	public static final String LOCK_PREFIX = "ticket_lock";
 
 	public static final int LOCK_EXPIRE = 20; // ms
 
@@ -53,6 +53,16 @@ public class RedisUtils {
 			log.error("获取redis 分布式锁发生了异常,{}", ExceptionUtils.getStackTrace(ex));
 		}
 		return result;
+	}
+
+	/**
+	 * 解锁分布式锁
+	 * @param lockKey
+	 * @return
+	 */
+	public static boolean unDistributeLock(String lockKey) {
+		lockKey = LOCK_PREFIX+lockKey;
+		return redisTemplate.delete(lockKey);
 	}
 
 	/**

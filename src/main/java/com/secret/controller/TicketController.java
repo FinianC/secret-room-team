@@ -2,7 +2,9 @@ package com.secret.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.secret.model.params.TicketQueryParam;
+import com.secret.model.params.purchaseTicketParam;
 import com.secret.model.vo.R;
 import com.secret.model.vo.TicketVo;
 import com.secret.service.TicketService;
@@ -33,6 +35,19 @@ public class TicketController {
     public R<Page<TicketVo>> page(@RequestBody TicketQueryParam ticketQueryParam){
         Page<TicketVo> page = ticketService.page(ticketQueryParam);
         return R.success(page);
+    }
+
+    @ApiOperation(value = "密室详情", httpMethod = "GET")
+    @GetMapping("/detail/{id}")
+    public R<TicketVo> detailById(@PathVariable Integer id){
+        TicketVo ticketVo = ticketService.detailById(id);
+        return R.success(ticketVo);
+    }
+
+    @ApiOperation(value = "购买密室票", httpMethod = "POST")
+    @PostMapping("/purchaseTicket")
+    public R<WxPayAppOrderResult> purchaseTicket(@RequestBody purchaseTicketParam purchaseTicketParam){
+        return  ticketService.purchaseTicket(purchaseTicketParam);
     }
 }
 
