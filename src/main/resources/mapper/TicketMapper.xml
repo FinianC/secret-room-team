@@ -63,6 +63,7 @@
     <sql id="store_detail">
         store.phone
     </sql>
+
     <select id="page" resultMap="ticketVo">
         select <include refid="tk"/> , <include refid="tm"/> , <include refid="store"/> from s_ticket tk join s_theme tm on tm.id = tk.theme_id join s_store store on store.id = tk.store_id
         <where>
@@ -81,4 +82,8 @@
             refid="store_detail"/> from s_ticket tk join s_theme tm on tm.id = tk.theme_id join s_store store on store.id = tk.store_id
         where tk.id = #{id} and tk.delete_state = 0
     </select>
+
+    <update id="increaseInventory">
+        update s_ticket set stock = stock+1,sold =sold-1  where id = {id} and sold > 0
+    </update>
 </mapper>

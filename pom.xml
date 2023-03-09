@@ -64,6 +64,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.redisson</groupId>
+			<artifactId>redisson</artifactId>
+			<version>3.13.6</version>
+		</dependency>
 		<!-- fastjson start -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -175,17 +181,16 @@
 			<groupId>com.github.binarywang</groupId>
 			<artifactId>java-emoji-converter</artifactId>
 			<version>0.1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.thoughtworks.xstream</groupId>
+					<artifactId>xstream</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
-
-		<!--微信小程序模版推送-->
-		<dependency>
-			<groupId>com.github.binarywang</groupId>
-			<artifactId>weixin-java-miniapp</artifactId>
-			<version>3.4.0</version>
 		</dependency>
 
 

@@ -3,6 +3,9 @@ package com.secret.utils;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -23,9 +26,10 @@ public class RedisUtils {
 
 	private static RedisTemplate<String, Object> redisTemplate;
 
-	public static final String LOCK_PREFIX = "ticket_lock";
+	public static final String LOCK_PREFIX = "ticket_lock_";
 
 	public static final int LOCK_EXPIRE = 20; // ms
+
 
 	@Autowired
 	public RedisUtils(RedisTemplate<String, Object> redisTemplate) {

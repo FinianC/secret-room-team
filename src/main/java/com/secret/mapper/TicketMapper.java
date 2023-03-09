@@ -30,4 +30,11 @@ public interface TicketMapper extends BaseMapper<TicketEntity> {
      * @return
      */
     TicketVo detailById(Integer id);
+
+    /**
+     * 增加库存
+     * @param id
+     * @return
+     */
+    Boolean increaseInventory(Integer id);
 }

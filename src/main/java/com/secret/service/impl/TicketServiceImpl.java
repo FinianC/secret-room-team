@@ -1,8 +1,10 @@
 package com.secret.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -12,11 +14,13 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.secret.config.MiniAppBean;
 import com.secret.constant.RS;
 import com.secret.exception.ServiceException;
+import com.secret.model.constant.OrderPayConstant;
 import com.secret.model.entity.MyTicketEntity;
 import com.secret.model.entity.TicketEntity;
 import com.secret.mapper.TicketMapper;
 import com.secret.model.entity.TicketPayEntity;
 import com.secret.model.entity.UserEntity;
+import com.secret.model.enums.RedisDelayQueueEnum;
 import com.secret.model.enums.TicketStatusEnum;
 import com.secret.model.params.TicketQueryParam;
 import com.secret.model.params.purchaseTicketParam;
@@ -31,7 +35,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.secret.service.UserService;
 import com.secret.utils.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,9 @@ import javax.annotation.Resource;
 
 import java.net.InetAddress;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -71,6 +77,9 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
     @Resource
     private UserService userService;
 
+    @Resource
+    private RedisDelayQueueUtil redisDelayQueueUtil;
+
     @Override
     public Page<TicketVo> page(TicketQueryParam ticketQueryParam) {
         Page<TicketEntity> page = new Page<>(ticketQueryParam.getCurrent(), ticketQueryParam.getPageSize());
@@ -95,9 +104,17 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
             TicketEntity byId = getById(purchaseTicketParam.getTicketId());
             SecretRoomAssert.notNull(byId,RS.TICKET_NOT_FOUND);
             MyTicketEntity myTicketEntity = initOrder(byId, user);
+            // todo 扣除库存
+
             TicketPayEntity ticketPayEntity = initTicketPay(myTicketEntity);
             UserEntity userEntity = userService.getById(user.getId());
-           return R.success(pay(userEntity.getOpenId(),ticketPayEntity.getPayNum(),ticketPayEntity.getPayPrice().toString(),byId.getName()));
+            WxPayMpOrderResult pay = pay(userEntity.getOpenId(), ticketPayEntity.getPayNum(), ticketPayEntity.getPayPrice().toString(), byId.getName());
+            Map<String, String> param = new HashMap<>();
+            param.put(OrderPayConstant.ORDER_ID, myTicketEntity.getId().toString());
+            param.put(OrderPayConstant.REMARK, "订单支付超时，自动取消订单");
+            param.put(OrderPayConstant.PAY_NO,ticketPayEntity.getPayNum());
+            redisDelayQueueUtil.addDelayQueue(param,miniAppBean.getPayTimeOut(), TimeUnit.SECONDS, RedisDelayQueueEnum.ORDER_PAYMENT_TIMEOUT.getCode());
+            return R.success(pay);
         }catch (Exception e) {
             e.printStackTrace();
             log.error("purchaseTicket error  {}", e);
@@ -119,7 +136,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
         MyTicketEntity myTicketEntity = new MyTicketEntity();
         myTicketEntity.setTicketId(ticketEntity.getId());
         myTicketEntity.setPrice(ticketEntity.getPrice());
-        myTicketEntity.setOrderNum(StringUtil.createOrderNo("MT", 16));
+        myTicketEntity.setOrderNum(StringUtil.createOrderNo("MT", 18));
         myTicketEntity.setStatus(TicketStatusEnum.TO_BE_PAID.getCode());
         myTicketEntity.setUserId(userVo.getId());
         myTicketService.save(myTicketEntity);
@@ -141,7 +158,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
         return  ticketPayEntity;
     }
 
-    public WxPayAppOrderResult pay(String openId,String payNo,String payMoney,String productName){
+    public WxPayMpOrderResult pay(String openId,String payNo,String payMoney,String productName){
         String hostAddress = null;
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
@@ -173,7 +190,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
                 .timeStart(nowStr)
                 .build();
         wxPayUnifiedOrderRequest.setSignType(WxPayConstants.SignType.MD5);
-        WxPayAppOrderResult order = null;
+        WxPayMpOrderResult order = null;
         try {
             order = wxPayService.createOrder(wxPayUnifiedOrderRequest);
         } catch (WxPayException e) {
@@ -206,5 +223,10 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
     @Override
     public String getNameById(Integer id) {
         return  getOne(new LambdaQueryWrapper<TicketEntity>().select(TicketEntity::getName).eq(TicketEntity::getId,id)).getName();
+    }
+
+    @Override
+    public Boolean increaseInventory(Integer id) {
+       return  ticketMapper.increaseInventory(id);
     }
 }

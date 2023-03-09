@@ -2,6 +2,7 @@ package com.secret.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.model.entity.TicketEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.secret.model.params.TicketQueryParam;
@@ -51,7 +52,7 @@ public interface TicketService extends IService<TicketEntity> {
      * @param productName 商品名称
      * @return
      */
-    WxPayAppOrderResult pay(String openId,String payNo,String payMoney,String productName);
+    WxPayMpOrderResult pay(String openId, String payNo, String payMoney, String productName);
 
     /**
      * 退款
@@ -70,6 +71,8 @@ public interface TicketService extends IService<TicketEntity> {
      * @return
      */
     String getNameById(Integer id);
+
+    Boolean increaseInventory(Integer id);
 
 
 }

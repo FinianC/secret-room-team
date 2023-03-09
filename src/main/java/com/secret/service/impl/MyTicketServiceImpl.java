@@ -2,6 +2,7 @@ package com.secret.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.constant.RS;
 import com.secret.model.entity.MyTicketEntity;
 import com.secret.mapper.MyTicketMapper;
@@ -53,7 +54,7 @@ public class MyTicketServiceImpl extends ServiceImpl<MyTicketMapper, MyTicketEnt
     private RefundRecordService refundRecordService;
 
     @Override
-    public R<WxPayAppOrderResult> toPay(ToPayParam toPayParam) {
+    public R<WxPayMpOrderResult> toPay(ToPayParam toPayParam) {
 
         UserVo user =(UserVo) UserLoginUtils.getUserInfo().getUser();
         String lock = user + "" + toPayParam.getOrderId();
@@ -70,7 +71,7 @@ public class MyTicketServiceImpl extends ServiceImpl<MyTicketMapper, MyTicketEnt
             one.setPayNum(StringUtil.createOrderNo(18));
             ticketPayService.save(one);
             String openIdById = userService.getOpenIdById(user.getId());
-            WxPayAppOrderResult pay = ticketService.pay(openIdById, one.getPayNum(), one.getPayPrice().toString(), ticketService.getNameById(myTicketEntity.getTicketId()));
+            WxPayMpOrderResult pay = ticketService.pay(openIdById, one.getPayNum(), one.getPayPrice().toString(), ticketService.getNameById(myTicketEntity.getTicketId()));
             return R.success(pay);
         }catch (Exception e){
             log.error("Payment failed no. {} ,error {}",one.getPayNum() , e);

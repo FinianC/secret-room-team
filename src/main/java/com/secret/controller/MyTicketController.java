@@ -3,6 +3,7 @@ package com.secret.controller;
 
 
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.model.params.RefundParam;
 import com.secret.model.params.ToPayParam;
 
@@ -37,7 +38,7 @@ public class MyTicketController {
 
     @ApiOperation(value = "去支付", httpMethod = "POST")
     @PostMapping("/toPay")
-    public R<WxPayAppOrderResult> toPay(@RequestBody ToPayParam toPayParam) {
+    public R<WxPayMpOrderResult> toPay(@RequestBody ToPayParam toPayParam) {
         return myTicketService.toPay(toPayParam);
     }
 

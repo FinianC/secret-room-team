@@ -1,6 +1,7 @@
 package com.secret.service;
 
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.model.entity.MyTicketEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.secret.model.params.RefundParam;
@@ -24,7 +25,7 @@ public interface MyTicketService extends IService<MyTicketEntity> {
      * @param toPayParam
      * @return
      */
-    R<WxPayAppOrderResult> toPay(ToPayParam toPayParam);
+    R<WxPayMpOrderResult> toPay(ToPayParam toPayParam);
 
 
     /**
