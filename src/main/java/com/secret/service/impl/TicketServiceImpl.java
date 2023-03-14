@@ -103,9 +103,16 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
             SecretRoomAssert.notNull(distributeLock,RS.DO_NOT_REPEAT_PURCHASE);
             TicketEntity byId = getById(purchaseTicketParam.getTicketId());
             SecretRoomAssert.notNull(byId,RS.TICKET_NOT_FOUND);
+            // 重试3次扣库存操作
+            for(int i = 0;i < 3 ;i++){
+                SecretRoomAssert.isTrue(byId.getStock()>0,RS.NOT_ENOUGH_STOCK);
+                boolean update = update(new LambdaUpdateWrapper<TicketEntity>().set(TicketEntity::getStock, byId.getStock() - 1).eq(TicketEntity::getId, byId.getId()).eq(TicketEntity::getUpdateTime, byId.getUpdateTime()));
+                if(update){
+                    break;
+                }
+                byId =  getById(purchaseTicketParam.getTicketId());
+            }
             MyTicketEntity myTicketEntity = initOrder(byId, user);
-            // todo 扣除库存
-
             TicketPayEntity ticketPayEntity = initTicketPay(myTicketEntity);
             UserEntity userEntity = userService.getById(user.getId());
             WxPayMpOrderResult pay = pay(userEntity.getOpenId(), ticketPayEntity.getPayNum(), ticketPayEntity.getPayPrice().toString(), byId.getName());

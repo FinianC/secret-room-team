@@ -1,13 +1,10 @@
 package com.secret.controller;
 
 
-import com.secret.model.entity.FleetTypeEntity;
 import com.secret.model.vo.ChatListVo;
-import com.secret.model.vo.FleetTypeVo;
 import com.secret.model.vo.R;
 import com.secret.model.vo.UserVo;
 import com.secret.service.GroupChatService;
-import com.secret.utils.TransferUtils;
 import com.secret.utils.UserLoginUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ public class GroupChatController {
     @ApiOperation("聊天框列表")
     @GetMapping("/list")
     public R<List<ChatListVo>> list(){
-        UserVo user = (UserVo) UserLoginUtils.getUserInfo().getUser();
+        UserVo user =UserLoginUtils.<UserVo>getUserInfo().getUser();
         List<ChatListVo> chatByUserId = groupChatService.getChatByUserId(user.getId());
         return R.success(chatByUserId);
     }

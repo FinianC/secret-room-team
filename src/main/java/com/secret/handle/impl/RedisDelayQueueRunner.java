@@ -44,10 +44,10 @@ public class RedisDelayQueueRunner implements CommandLineRunner {
 						}
 					}
 				} catch (InterruptedException e) {
-					log.error("(Redis delay queue is interrupted abnormally) {}", e.getMessage());
+					log.error("Redis delay queue is interrupted abnormally {}", e.getMessage());
 				}
 			}
 		});
-		log.info("(Redis delay queue started successfully)");
+		log.info("Redis delay queue started successfully");
 	}
 }

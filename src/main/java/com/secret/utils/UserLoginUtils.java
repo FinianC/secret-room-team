@@ -2,6 +2,7 @@ package com.secret.utils;
 
 import com.secret.constant.RS;
 import com.secret.exception.ServiceException;
+import com.secret.model.constant.SecretRoomConstant;
 import com.secret.model.vo.UserVerificationVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +28,9 @@ public class UserLoginUtils {
         }
     }
 
+    private UserLoginUtils() {
+    }
+
     //获取heard中的参数
     public static Map<String, String> getRequestHeaderMap() {
         Map<String, String> headerMap = new HashMap<>(8);
@@ -44,18 +48,18 @@ public class UserLoginUtils {
     }
 
 
-    public static UserVerificationVo getUserInfo() {
+    public static <T> UserVerificationVo<T> getUserInfo() {
         log.info("get into getUserInfo");
-        String token = getRequestHeaderMap().get("token");
+        String token = getRequestHeaderMap().get(SecretRoomConstant.HEADER_TOKEN);
         log.info("token {}",token);
         return  getUserInfo(token);
     }
 
-    public static UserVerificationVo getUserInfo(String token) {
+    public static  <T> UserVerificationVo<T>  getUserInfo(String token) {
         if (StringUtils.isEmpty(token)) {
             throw new ServiceException(RS.LOGIN_FAIL);
         }
-        UserVerificationVo user = RedisUtils.get(token, UserVerificationVo.class);
+        UserVerificationVo<T> user = RedisUtils.get(token, UserVerificationVo.class);
         if (user == null) {
             log.info("user is null token {}", token);
             throw new ServiceException(RS.TOKEN_NOT_FOUNT);
@@ -63,14 +67,14 @@ public class UserLoginUtils {
         return user;
     }
 
-    public static UserVerificationVo getUserInfoIsNull() {
+    public static  <T> UserVerificationVo<T>  getUserInfoIsNull() {
         log.info("get into getUserInfo");
         String token = getRequestHeaderMap().get("token");
         log.info("token {}", token);
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        UserVerificationVo user = RedisUtils.get(token, UserVerificationVo.class);
+        UserVerificationVo<T> user = RedisUtils.get(token, UserVerificationVo.class);
         if (user == null) {
             log.info("user is null token {}", token);
             return null;

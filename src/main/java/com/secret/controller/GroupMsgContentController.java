@@ -48,7 +48,7 @@ public class GroupMsgContentController {
         UserVo user = (UserVo) UserLoginUtils.getUserInfo().getUser();
         Boolean groupMember = groupChatMemberService.isGroupMember(user.getId(), groupMsgContentQueryParam.getGroupChatId());
         Assert.isTrue(groupMember, RS.GROUP_CHAT_NOT_EXIST.message());
-        Page page = new Page<>(groupMsgContentQueryParam.getCurrent(), groupMsgContentQueryParam.getPageSize());
+        Page<GroupMsgContentVo> page = new Page<>(groupMsgContentQueryParam.getCurrent(), groupMsgContentQueryParam.getPageSize());
        return R.success(groupMsgContentService.pageByChatId(page,groupMsgContentQueryParam.getGroupChatId()));
     }
 

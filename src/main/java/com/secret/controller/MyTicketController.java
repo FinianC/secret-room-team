@@ -1,23 +1,20 @@
 package com.secret.controller;
 
 
-
-import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.model.params.RefundParam;
 import com.secret.model.params.ToPayParam;
-
-import com.secret.model.vo.R;
+import com.secret.model.vo.*;
 import com.secret.service.MyTicketService;
+import com.secret.utils.UserLoginUtils;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
@@ -30,7 +27,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/myTicket")
 public class MyTicketController {
-
 
     @Resource
     private MyTicketService myTicketService;
@@ -47,6 +43,18 @@ public class MyTicketController {
     @Transactional
     public R<Boolean> refund(@RequestBody RefundParam refundParam) {
         return myTicketService.refund(refundParam);
+    }
+
+    @ApiOperation(value = "分页查询我的密室票/我的订单", httpMethod = "POST")
+    @PostMapping("/page")
+    public R<Page<MyTicketVo>> page(@RequestBody MyTicketQueryVo myTicketQueryVo) {
+        return R.success( myTicketService.page(myTicketQueryVo));
+    }
+
+    @ApiOperation(value = "获取消费二维码",notes = "有效期三分钟", httpMethod = "GET")
+    @GetMapping("/getQRCode/{orderId}")
+    public void getQRCode(@PathVariable Integer orderId, HttpServletResponse response ) {
+        myTicketService.getQRCode(orderId,response);
     }
 }
 

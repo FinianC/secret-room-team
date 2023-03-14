@@ -56,7 +56,7 @@ public class GroupMsgContentServiceImpl extends ServiceImpl<GroupMsgContentMappe
      * @return
      */
     @Override
-    public Page<GroupMsgContentVo> pageByChatId(Page page, Integer chatId) {
+    public Page<GroupMsgContentVo> pageByChatId(Page<GroupMsgContentVo> page, Integer chatId) {
         Page<GroupMsgContentVo> groupMsgContentVoPage = groupMsgContentMapper.pageByChatId(page, chatId);
         Collections.reverse(groupMsgContentVoPage.getRecords());
         return groupMsgContentVoPage;

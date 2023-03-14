@@ -1,5 +1,6 @@
 package com.secret.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.model.entity.MyTicketEntity;
@@ -7,8 +8,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.secret.model.params.RefundParam;
 import com.secret.model.params.ToPayParam;
 import com.secret.model.params.purchaseTicketParam;
+import com.secret.model.vo.MyTicketQueryVo;
+import com.secret.model.vo.MyTicketVo;
 import com.secret.model.vo.R;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * <p>
@@ -34,5 +41,19 @@ public interface MyTicketService extends IService<MyTicketEntity> {
      * @return
      */
     R<Boolean> refund( RefundParam refundParam);
+
+    /**
+     * 分页查询我的密室票
+     * @param myTicketQueryVo
+     * @return
+     */
+    Page<MyTicketVo> page( MyTicketQueryVo myTicketQueryVo);
+
+    /**
+     * 获取消费二维码
+     * @param orderId
+     * @param response
+     */
+    void getQRCode( Integer orderId, HttpServletResponse response );
 
 }

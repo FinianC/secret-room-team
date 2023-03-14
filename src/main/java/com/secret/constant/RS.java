@@ -74,7 +74,11 @@ public enum RS {
 	PAYMENT_FAILED(2015,"支付失败"),
 
 
-	REFUND_ERROR(2016,"退款失败")
+	REFUND_ERROR(2016,"退款失败"),
+
+	ORDER_NOT_FOUND(2017,"未找到订单"),
+
+	NOT_ENOUGH_STOCK(2018,"库存不足"),
 
 
 	;
