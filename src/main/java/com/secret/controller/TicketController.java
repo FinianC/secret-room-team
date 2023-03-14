@@ -2,7 +2,7 @@ package com.secret.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.model.params.TicketQueryParam;
 import com.secret.model.params.purchaseTicketParam;
 import com.secret.model.vo.R;
@@ -46,7 +46,7 @@ public class TicketController {
 
     @ApiOperation(value = "购买密室票", httpMethod = "POST")
     @PostMapping("/purchaseTicket")
-    public R<WxPayAppOrderResult> purchaseTicket(@RequestBody purchaseTicketParam purchaseTicketParam){
+    public R<WxPayMpOrderResult> purchaseTicket(@RequestBody purchaseTicketParam purchaseTicketParam){
         return  ticketService.purchaseTicket(purchaseTicketParam);
     }
 }

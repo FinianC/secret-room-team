@@ -7,6 +7,7 @@ import com.secret.model.entity.FileEntity;
 import com.secret.model.vo.FileVo;
 import com.secret.model.vo.R;
 import com.secret.service.FileService;
+import com.secret.utils.SecretRoomAssert;
 import com.secret.utils.TransferUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +53,7 @@ public class FileController {
 
     @PostMapping("/upload")
     @ApiOperation("上传文件")
-    public @ResponseBody R<Integer> upload(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse httpServletResponse){
+    public @ResponseBody R<FileVo> upload(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse httpServletResponse){
         if(!file.isEmpty()){
             // 如果目录不存在则创建
             httpServletResponse.setContentType("text/html;charset=utf-8");
@@ -60,15 +61,19 @@ public class FileController {
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
-            String OriginalFilename = file.getOriginalFilename();//获取原文件名
-            String suffixName = OriginalFilename.substring(OriginalFilename.lastIndexOf("."));//获取文件后缀名
+            SecretRoomAssert.notNull(file,RS.FILE_NOT_FOUNT);
+            String originalFilename = file.getOriginalFilename();//获取原文件名
+            if(originalFilename==null){
+               return null;
+            }
+            String suffixName = originalFilename.substring(originalFilename.lastIndexOf("."));//获取文件后缀名
             //重新随机生成名字
-            String filename = UUID.randomUUID().toString() + suffixName;
-            File localFile = new File(fileConfig.getFileUrl() + "/" + filename);
+            String filename = UUID.randomUUID() + suffixName;
+            File localFile = new File(fileConfig.getFileUrl() , filename);
             try {
                 file.transferTo(localFile); //把上传的文件保存至本地
                 FileEntity fileEntity = new FileEntity();
-                fileEntity.setName(OriginalFilename);
+                fileEntity.setName(originalFilename);
                 fileEntity.setUrl(localFile.getPath());
                 fileService.save(fileEntity);
                 FileVo fileVo = new FileVo();
@@ -91,7 +96,6 @@ public class FileController {
     public byte[] test(@PathVariable String id) throws Exception {
         FileEntity fileEntity = fileService.getById(id);
         File file = null;
-        try {
 //        读取图片
             if (fileEntity == null) {
                 file = new File(getFileUrl() + id);
@@ -100,18 +104,17 @@ public class FileController {
             }
             if (!file.exists()) {
                 log.error("file cannot be found {}", id);
-                return null;
+                return new byte[0];
             }
-            FileInputStream inputStream = new FileInputStream(file);
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes, 0, inputStream.available());
-            return bytes;
+            try( FileInputStream inputStream = new FileInputStream(file);) {
+                byte[] bytes = new byte[inputStream.available()];
+                inputStream.read(bytes, 0, inputStream.available());
+                return bytes;
+            }catch (IOException e) {
+                log.error("获取图片异常{}",e.getMessage());
+                return new byte[0];
+            }
 
-        } catch (IOException e) {
-            log.error("获取图片异常{}",e.getMessage());
-            return null;
-        } finally {
-        }
     }
 
     String getFileUrl(){

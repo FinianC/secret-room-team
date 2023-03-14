@@ -93,7 +93,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
 
     @Override
     @Transactional
-    public R<WxPayAppOrderResult> purchaseTicket(purchaseTicketParam purchaseTicketParam) {
+    public R<WxPayMpOrderResult> purchaseTicket(purchaseTicketParam purchaseTicketParam) {
         UserVerificationVo<UserVo> userInfo = UserLoginUtils.getUserInfo();
         UserVo user = userInfo.getUser();
         String lock = user.getId()+""+purchaseTicketParam.getTicketId();

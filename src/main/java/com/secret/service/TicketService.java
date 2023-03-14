@@ -42,7 +42,7 @@ public interface TicketService extends IService<TicketEntity> {
      * @param purchaseTicketParam
      * @return
      */
-    R<WxPayAppOrderResult> purchaseTicket(purchaseTicketParam purchaseTicketParam);
+    R<WxPayMpOrderResult> purchaseTicket(purchaseTicketParam purchaseTicketParam);
 
     /**
      * 支付

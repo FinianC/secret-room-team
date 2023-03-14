@@ -77,7 +77,7 @@ public class MotorcadeController {
 
     @ApiOperation(value = "删除车队信息")
     @PostMapping("/user/delete/{id}")
-    public R<Integer> delete(@PathVariable String id) {
+    public R<Integer> delete(@PathVariable Integer id) {
         motorcadeService.removeById(id);
         return R.success(id);
     }
@@ -109,7 +109,7 @@ public class MotorcadeController {
 
     @ApiOperation(value = "车队详情", httpMethod = "GET")
     @GetMapping("/detail/{id}")
-    public R<Page<MotorcadeVo>> detail( @PathVariable Integer id) {
+    public R<MotorcadeVo> detail( @PathVariable Integer id) {
         MotorcadeVo motorcadeVo = motorcadeService.getMotorcadeVo(id);
         return R.success(motorcadeVo);
     }
