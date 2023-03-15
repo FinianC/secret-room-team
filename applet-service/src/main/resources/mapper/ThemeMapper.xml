@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secret.mapper.ThemeMapper">
+
+    <select id="existsThemeList" resultType="com.secret.vo.applet.ThemeVo">
+        select t.id ,t.name from s_theme t
+                            where t.id in ( select distinct mt.theme_id  from  s_motorcade mt where  mt.delete_state = 0  and mt.status = 1)
+    </select>
+</mapper>

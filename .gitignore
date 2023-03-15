@@ -4,3 +4,5 @@
 /.idea/
 /src/main/resources/application-dev.yml
 /log/
+/commons/target/
+/applet-service/target/
