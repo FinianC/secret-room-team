@@ -9,10 +9,7 @@ import com.secret.entity.UserEntity;
 import com.secret.params.applet.UserGetOpenIdParam;
 import com.secret.params.applet.UserModifyParam;
 import com.secret.service.UserService;
-import com.secret.utils.RedisUtils;
-import com.secret.utils.TransferUtils;
-import com.secret.utils.UserLoginUtils;
-import com.secret.utils.WechatUtil;
+import com.secret.utils.*;
 import com.secret.vo.R;
 import com.secret.vo.applet.UserVerificationVo;
 import com.secret.vo.applet.UserVo;
@@ -73,6 +70,29 @@ public class UserController {
             RedisUtils.set(openId, token, 86400);
         }
         return R.success(RedisUtils.get(token, UserVerificationVo.class),RS.LOGIN_SUCCESS);
+    }
+
+    @ApiOperation(value = "获取手机号", notes = "用户登录信息在header里面获取,调用该方法后会自动将手机号补全到用户信息内", httpMethod = "POST")
+    @PostMapping("/getPhoneNumber")
+    public R<UserVerificationVo<UserVo>> getPhoneNumber(@RequestBody UserGetOpenIdParam userGetOpenIdParam) {
+        UserVerificationVo<UserVo> userInfo = UserLoginUtils.getUserInfo();
+        JSONObject jsonObject = WechatUtil.getPhoneNumber(miniAppBean.getAppId(), miniAppBean.getAppSecret(), userGetOpenIdParam.getCode());
+        JSONObject phone_info = (JSONObject) jsonObject.get("phone_info");
+        if (phone_info == null) {
+            log.error("getOpenid error {}", JSONObject.toJSONString(jsonObject));
+            return R.fail(RS.MENU_NOT_FOUNT);
+        }
+        UserVo user = userInfo.getUser();
+        UserEntity userEntity = userService.getById(user.getId());
+        String phoneNumber = (String) phone_info.get("phoneNumber");
+        userEntity.setPhone(phoneNumber);
+        userService.updateById(userEntity);
+
+        user.setPhone(phoneNumber);
+        RedisUtils.set(userInfo.getToken(), userInfo, 86400);
+        RedisUtils.set(userEntity.getOpenId(), userInfo.getToken(), 86400);
+
+        return R.success(userInfo);
     }
 
     @ApiOperation(value = "更新用户信息", httpMethod = "POST")

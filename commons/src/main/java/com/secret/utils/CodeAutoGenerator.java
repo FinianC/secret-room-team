@@ -41,13 +41,13 @@ public class CodeAutoGenerator {
 		String moduleName = "secret";
 //		String[] tableNamesToGenerate = scanner("表名，多个英文逗号分割").split(",");
 		 String[] tableNamesToGenerate = {
-				"s_refund_record"
+				"s_ticket_detail"
 		 };
 		// 代码生成器
 		AutoGenerator mpg = new AutoGenerator();
 
 		// 项目根目录
-		String projectPath = "D:\\ideaCode\\secret-room-team";
+		String projectPath = "D:\\ideaCode\\secret-room-team\\applet-service";
 
 		//// 全局配置
 		GlobalConfig gc = new GlobalConfig();
@@ -81,7 +81,7 @@ public class CodeAutoGenerator {
 		PackageConfig pc = new PackageConfig();
 		pc.setModuleName(moduleName)
 				.setParent("com")
-				.setEntity("model.entity")
+				.setEntity("entity")
 				.setController("controller")
 				.setMapper("mapper")
 				.setXml("mapper.xml")

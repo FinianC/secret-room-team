@@ -30,8 +30,6 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -60,11 +58,8 @@ public class WsController {
     EmojiConverter emojiConverter = EmojiConverter.getInstance();
 
 
-
-    SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 群聊的消息接受与转发
-     * @param groupMsgContent
      */
     @MessageMapping("/chat/{chatId}")
     @Transactional
@@ -82,9 +77,7 @@ public class WsController {
                 .eq(GroupChatMemberEntity::getUserId, user.getId())
                 .eq(GroupChatMemberEntity::getGroupId, groupChatEntity.getId()));
         LocalDateTime now = DateUtil.now();
-        /**
-         *  查询20分钟前的显示时间 如果有 则当前消息与前面共享显示时间 如果无则设置当前时间为显示时间
-          */
+        //查询20分钟前的显示时间 如果有 则当前消息与前面共享显示时间 如果无则设置当前时间为显示时间
         LocalDateTime localDateTime = now.minusMinutes(20);
         int count = groupMsgContentService.count(new LambdaQueryWrapper<GroupMsgContentEntity>().eq(GroupMsgContentEntity::getGroupId,chatId).gt(GroupMsgContentEntity::getDisplayTime, localDateTime));
         if(count<1){
@@ -112,13 +105,12 @@ public class WsController {
 
     @SubscribeMapping("/topic/test")
     public String subscribeTopic(){
-        System.out.println("被订阅...");
+       log.info("被订阅...");
         return "订阅成功";
     }
 
     /**
      * 更新聊天框
-     * @param chatId
      */
     public void toUpdateChatList(Integer chatId){
         List<UserEntity> userEntities = groupChatMemberService.getUOpenIdByCId(chatId);
@@ -146,7 +138,7 @@ public class WsController {
    */
   @MessageMapping("/toUpdate/chatList")
   public void getChatList(User principal) {
-      User principal1 = (User) principal;
+      User principal1 = principal;
       simpMessagingTemplate.convertAndSend( "/topic/chat",principal1);
   }
 }

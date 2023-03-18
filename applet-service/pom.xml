@@ -9,14 +9,13 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.secretroom</groupId>
-	<artifactId>applets-service</artifactId>
+	<artifactId>applet-service</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>applets-service</name>
 	<packaging>jar</packaging>
 	<description>小程序服务端</description>
 	<properties>
 		<java.version>1.8</java.version>
-		<mybatis-plus.version>3.4.2</mybatis-plus.version>
 		<swagger2.version>2.9.2</swagger2.version>
 	</properties>
 

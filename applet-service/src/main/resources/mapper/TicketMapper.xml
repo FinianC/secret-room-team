@@ -15,9 +15,13 @@
         <result column="introduce" property="introduce"/>
         <result column="stock" property="stock"/>
         <result column="sold" property="sold"/>
-        <result column="sold" property="sold"/>
+        <result column="maximum_number" property="maximumNumber"/>
+        <result column="clustering_number" property="clusteringNumber"/>
+        <result column="time" property="time"/>
         <result column="create_time" property="createTime"/>
         <result column="theme_name" property="themeName"/>
+        <result column="terror_id" property="terrorId"/>
+        <result column="terror_name" property="terrorName"/>
         <association property="storeVo" javaType="com.secret.vo.applet.StoreVo">
             <id column="store_id" property="id"/>
             <result column="store_name" property="name"/>
@@ -45,11 +49,18 @@
         tk.create_time
     </sql>
     <sql id="tk_detail">
-        tk.purchase_instructions,
-        tk.introduce
+        tk_d.purchase_instructions,
+        tk_d.introduce,
+        tk_d.maximum_number,
+        tk_d.clustering_number,
+        tk_d.time
     </sql>
     <sql id="tm">
         tm.name as theme_name
+    </sql>
+    <sql id="tl">
+        tl.id as terror_id,
+        tl.name as terror_name
     </sql>
     <sql id="store">
         store.id as store_id ,
@@ -65,7 +76,10 @@
     </sql>
 
     <select id="page" resultMap="ticketVo">
-        select <include refid="tk"/> , <include refid="tm"/> , <include refid="store"/> from s_ticket tk join s_theme tm on tm.id = tk.theme_id join s_store store on store.id = tk.store_id
+        select <include refid="tk"/> , <include refid="tm"/> ,<include refid="tl"/>, <include refid="store"/>
+            from s_ticket tk left join s_theme tm on tm.id = tk.theme_id
+                left join s_terror_level tl  on tk.terror_id = tl.id
+                left join s_store store on store.id = tk.store_id
         <where>
             <if test="ticketQueryParam.themeId !=null  ">
                and tm.id = #{ticketQueryParam.themeId}
@@ -78,8 +92,12 @@
         order by tk.create_time desc
     </select>
     <select id="detailById" resultMap="ticketVo">
-        select <include refid="tk"/> ,<include refid="tk_detail"/>, <include refid="tm"/> , <include refid="store"/>,<include
-            refid="store_detail"/> from s_ticket tk join s_theme tm on tm.id = tk.theme_id join s_store store on store.id = tk.store_id
+        select <include refid="tk"/> ,<include refid="tk_detail"/>, <include refid="tm"/> , <include refid="store"/>,<include refid="tl"/> ,<include refid="store_detail"/>
+            from s_ticket tk
+                        left join s_theme tm on tm.id = tk.theme_id
+                        left join s_terror_level tl  on tk.terror_id = tl.id
+                        left join s_store store on store.id = tk.store_id
+                        left join s_ticket_detail tk_d on tk_d.ticket_id = tk.id
         where tk.id = #{id} and tk.delete_state = 0
     </select>
 

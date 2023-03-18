@@ -26,6 +26,12 @@ public class TicketVo {
     @ApiModelProperty(value = "主题名称")
     private String themeName;
 
+    @ApiModelProperty(value = "恐怖等级id")
+    private Integer terrorId;
+
+    @ApiModelProperty(value = "恐怖等级")
+    private String terrorName;
+
     @ApiModelProperty(value = "现价")
     private BigDecimal price;
 
@@ -38,21 +44,26 @@ public class TicketVo {
     @ApiModelProperty(value = "门店id")
     private Integer storeId;
 
-    @ApiModelProperty(value = "购买须知")
-    private String purchaseInstructions;
-
-    @ApiModelProperty(value = "商品介绍")
-    private String introduce;
-
     @ApiModelProperty(value = "库存")
     private Integer stock;
 
     @ApiModelProperty(value = "已售")
     private Integer sold;
 
-    @ApiModelProperty(value = "总数")
-    private Integer total;
+    @ApiModelProperty(value = "购买须知")
+    private String purchaseInstructions;
 
+    @ApiModelProperty(value = "商品介绍")
+    private String introduce;
+
+    @ApiModelProperty(value = "最大拼团人数")
+    private Integer maximumNumber;
+
+    @ApiModelProperty(value = "成团数")
+    private Integer clusteringNumber;
+
+    @ApiModelProperty(value = "时间 单位：分钟")
+    private Integer time;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;

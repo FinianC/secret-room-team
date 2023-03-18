@@ -109,7 +109,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
                 }
                 byId =  getById(purchaseTicketParam.getTicketId());
             }
-            MyTicketEntity myTicketEntity = initOrder(byId, user);
+            MyTicketEntity myTicketEntity = initOrder(byId,purchaseTicketParam.getPhone(), user);
             TicketPayEntity ticketPayEntity = initTicketPay(myTicketEntity);
             UserEntity userEntity = userService.getById(user.getId());
             WxPayMpOrderResult pay = pay(userEntity.getOpenId(), ticketPayEntity.getPayNum(), ticketPayEntity.getPayPrice().toString(), byId.getName());
@@ -136,13 +136,14 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
      * @param userVo
      * @return
      */
-    MyTicketEntity initOrder(TicketEntity ticketEntity, UserVo userVo){
+    MyTicketEntity initOrder(TicketEntity ticketEntity,String phone, UserVo userVo){
         MyTicketEntity myTicketEntity = new MyTicketEntity();
         myTicketEntity.setTicketId(ticketEntity.getId());
         myTicketEntity.setPrice(ticketEntity.getPrice());
         myTicketEntity.setOrderNum(StringUtil.createOrderNo("MT", 18));
         myTicketEntity.setStatus(TicketStatusEnum.TO_BE_PAID.getCode());
         myTicketEntity.setUserId(userVo.getId());
+        myTicketEntity.setPhone(phone);
         myTicketService.save(myTicketEntity);
         return  myTicketEntity;
     }

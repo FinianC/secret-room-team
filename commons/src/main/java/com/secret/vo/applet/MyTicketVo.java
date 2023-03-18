@@ -18,6 +18,9 @@ public class MyTicketVo {
     @ApiModelProperty(value = "用户id")
     private Integer userId;
 
+    @ApiModelProperty(value = "手机号")
+    private String phone;
+
     @ApiModelProperty(value = "价格")
     private BigDecimal price;
 

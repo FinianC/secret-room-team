@@ -1,18 +1,14 @@
 package com.secret.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -46,6 +42,10 @@ public class TicketEntity implements Serializable {
     @TableField("theme_id")
     private Integer themeId;
 
+    @ApiModelProperty(value = "恐怖等级")
+    @TableField("terror_id")
+    private Integer terrorId;
+
     @ApiModelProperty(value = "现价")
     @TableField("price")
     private BigDecimal price;
@@ -61,14 +61,6 @@ public class TicketEntity implements Serializable {
     @ApiModelProperty(value = "门店id")
     @TableField("store_id")
     private Integer storeId;
-
-    @ApiModelProperty(value = "购买须知")
-    @TableField("purchase_instructions")
-    private String purchaseInstructions;
-
-    @ApiModelProperty(value = "商品介绍")
-    @TableField("introduce")
-    private String introduce;
 
     @ApiModelProperty(value = "库存")
     @TableField("stock")
