@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.secret.constant.RS;
-import com.secret.constant.SecretRoomConstant;
 import com.secret.entity.MyTicketEntity;
 import com.secret.entity.RefundRecordEntity;
 import com.secret.entity.TicketPayEntity;
@@ -60,6 +59,8 @@ public class MyTicketServiceImpl extends ServiceImpl<MyTicketMapper, MyTicketEnt
     private RefundRecordService refundRecordService;
 
     @Resource
+    private SysConfigService sysConfigService;
+    @Resource
     private MyTicketMapper myTicketMapper;
 
     @Override
@@ -75,10 +76,6 @@ public class MyTicketServiceImpl extends ServiceImpl<MyTicketMapper, MyTicketEnt
             MyTicketEntity myTicketEntity = getById(toPayParam.getOrderId());
             SecretRoomAssert.notNull(myTicketEntity,RS.ORDER_ERROR);
             one = ticketPayService.getOne(new LambdaQueryWrapper<TicketPayEntity>().eq(TicketPayEntity::getOrderId, myTicketEntity.getId()));
-            ticketPayService.removeById(one.getId());
-            one.setId(null);
-            one.setPayNum(StringUtil.createOrderNo(18));
-            ticketPayService.save(one);
             String openIdById = userService.getOpenIdById(user.getId());
             WxPayMpOrderResult pay = ticketService.pay(openIdById, one.getPayNum(), one.getPayPrice().toString(), ticketService.getNameById(myTicketEntity.getTicketId()));
             return R.success(pay);
@@ -165,7 +162,7 @@ public class MyTicketServiceImpl extends ServiceImpl<MyTicketMapper, MyTicketEnt
         qrCodeVo.setSequence(TextUtils.uuid("",25));
         String content = JSON.toJSONString(qrCodeVo);
         // 设置有效期
-        RedisUtils.set(qrCodeVo.getKey(),qrCodeVo.getSequence(), SecretRoomConstant.QR_CODE_EXPIRED);
+        RedisUtils.set(qrCodeVo.getKey(),qrCodeVo.getSequence(), sysConfigService.getQrCodeTimeout()*60);
         String encode = Base64Encoder.encode(content.getBytes());
         QrCodeUtil.generate(encode, 300, 300, "jpg", response.getOutputStream());
     }

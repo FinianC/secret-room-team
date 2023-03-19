@@ -24,10 +24,7 @@ import com.secret.exception.ServiceException;
 import com.secret.mapper.TicketMapper;
 import com.secret.params.applet.TicketQueryParam;
 import com.secret.params.applet.purchaseTicketParam;
-import com.secret.service.MyTicketService;
-import com.secret.service.TicketPayService;
-import com.secret.service.TicketService;
-import com.secret.service.UserService;
+import com.secret.service.*;
 import com.secret.utils.*;
 import com.secret.vo.R;
 import com.secret.vo.applet.TicketVo;
@@ -38,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -75,6 +73,9 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
     private UserService userService;
 
     @Resource
+    private SysConfigService sysConfigService;
+
+    @Resource
     private RedisDelayQueueUtil redisDelayQueueUtil;
 
     @Override
@@ -109,7 +110,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
                 }
                 byId =  getById(purchaseTicketParam.getTicketId());
             }
-            MyTicketEntity myTicketEntity = initOrder(byId,purchaseTicketParam.getPhone(), user);
+            MyTicketEntity myTicketEntity = initOrder(byId,purchaseTicketParam, user);
             TicketPayEntity ticketPayEntity = initTicketPay(myTicketEntity);
             UserEntity userEntity = userService.getById(user.getId());
             WxPayMpOrderResult pay = pay(userEntity.getOpenId(), ticketPayEntity.getPayNum(), ticketPayEntity.getPayPrice().toString(), byId.getName());
@@ -136,14 +137,15 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
      * @param userVo
      * @return
      */
-    MyTicketEntity initOrder(TicketEntity ticketEntity,String phone, UserVo userVo){
+    MyTicketEntity initOrder(TicketEntity ticketEntity,purchaseTicketParam purchaseTicketParam, UserVo userVo){
         MyTicketEntity myTicketEntity = new MyTicketEntity();
         myTicketEntity.setTicketId(ticketEntity.getId());
-        myTicketEntity.setPrice(ticketEntity.getPrice());
+        BigDecimal multiply = ticketEntity.getPrice().multiply(BigDecimal.valueOf(purchaseTicketParam.getQuantity()));
+        myTicketEntity.setPrice(multiply);
         myTicketEntity.setOrderNum(StringUtil.createOrderNo("MT", 18));
         myTicketEntity.setStatus(TicketStatusEnum.TO_BE_PAID.getCode());
         myTicketEntity.setUserId(userVo.getId());
-        myTicketEntity.setPhone(phone);
+        myTicketEntity.setPhone(purchaseTicketParam.getPhone());
         myTicketService.save(myTicketEntity);
         return  myTicketEntity;
     }
@@ -172,7 +174,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
         }
         LocalDateTime now = LocalDateTime.now();
         String nowStr = DateUtil.localDateTimeToStr(now, DateUtil.dfDateTime);
-        LocalDateTime localDateTime = now.plusMinutes(10);
+        LocalDateTime localDateTime = now.plusMinutes(sysConfigService.getOrderTimeout());
         String timeExpire = DateUtil.localDateTimeToStr(localDateTime, DateUtil.dfDateTime);
         final WxPayUnifiedOrderRequest wxPayUnifiedOrderRequest = WxPayUnifiedOrderRequest.newBuilder()
                 //调起支付的人的 openId

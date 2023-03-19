@@ -95,7 +95,7 @@ public class FleetChangeMessageServiceImpl extends ServiceImpl<FleetChangeMessag
         data.put("发起人", new TemplateDataDTO(motorcadeVo.getNickname(), "#173177"));
         data.put("车队主题", new TemplateDataDTO(motorcadeVo.getTypeName().toString(), "#173177"));
         data.put("车队名称", new TemplateDataDTO(motorcadeVo.getTitle(), "#173177"));
-        data.put("发车时间", new TemplateDataDTO(DateUtil.DateToStrNotSS(motorcadeVo.getCompetitionDate()), "#173177"));
+        data.put("发车时间", new TemplateDataDTO(DateUtil.dateToStrNotSS(motorcadeVo.getCompetitionDate()), "#173177"));
         int count = motorcadeVo.getJoinedMotorcadeVos() != null ? motorcadeVo.getJoinedMotorcadeVos().size() + 1 : 1;
         data.put("组队人数", new TemplateDataDTO(String.valueOf(count), "#173177"));
         // 模板内容
