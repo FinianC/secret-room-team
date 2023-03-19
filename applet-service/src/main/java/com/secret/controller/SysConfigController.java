@@ -32,7 +32,7 @@ public class SysConfigController {
     }
 
     @ApiOperation(value = "获取二维码过期时间",notes = "单位 分钟", httpMethod = "GET")
-    @GetMapping("/getOrderTimeout")
+    @GetMapping("/getQrCodeTimeout")
     public R<Long> getQrCodeTimeout(){
         return R.success(sysConfigService.getQrCodeTimeout());
     }
