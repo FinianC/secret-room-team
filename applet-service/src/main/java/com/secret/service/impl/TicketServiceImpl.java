@@ -140,8 +140,10 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
     MyTicketEntity initOrder(TicketEntity ticketEntity,purchaseTicketParam purchaseTicketParam, UserVo userVo){
         MyTicketEntity myTicketEntity = new MyTicketEntity();
         myTicketEntity.setTicketId(ticketEntity.getId());
+        myTicketEntity.setPrice(ticketEntity.getPrice());
         BigDecimal multiply = ticketEntity.getPrice().multiply(BigDecimal.valueOf(purchaseTicketParam.getQuantity()));
-        myTicketEntity.setPrice(multiply);
+        myTicketEntity.setPaymentAmount(multiply);
+        myTicketEntity.setQuantity(purchaseTicketParam.getQuantity());
         myTicketEntity.setOrderNum(StringUtil.createOrderNo("MT", 18));
         myTicketEntity.setStatus(TicketStatusEnum.TO_BE_PAID.getCode());
         myTicketEntity.setUserId(userVo.getId());
@@ -159,7 +161,7 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketEntity> i
         TicketPayEntity ticketPayEntity = new TicketPayEntity();
         ticketPayEntity.setPayNum(StringUtil.createOrderNo( 18));
         ticketPayEntity.setStatus(TicketStatusEnum.TO_BE_PAID.getCode());
-        ticketPayEntity.setPayPrice(myTicketEntity.getPrice());
+        ticketPayEntity.setPayPrice(myTicketEntity.getPaymentAmount());
         ticketPayEntity.setOrderId(myTicketEntity.getId());
         ticketPayService.save(ticketPayEntity);
         return  ticketPayEntity;

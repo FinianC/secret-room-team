@@ -46,6 +46,14 @@ public class MyTicketEntity implements Serializable {
     @TableField("price")
     private BigDecimal price;
 
+    @ApiModelProperty(value = "付款金额")
+    @TableField("payment_amount")
+    private BigDecimal paymentAmount;
+
+    @ApiModelProperty(value = "数量")
+    @TableField("quantity")
+    private Integer quantity;
+
     @ApiModelProperty(value = "订单号")
     @TableField("order_num")
     private String orderNum;

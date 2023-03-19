@@ -24,6 +24,12 @@ public class MyTicketVo {
     @ApiModelProperty(value = "价格")
     private BigDecimal price;
 
+    @ApiModelProperty(value = "付款金额")
+    private BigDecimal paymentAmount;
+
+    @ApiModelProperty(value = "数量")
+    private Integer quantity;
+
     @ApiModelProperty(value = "订单号")
     private String orderNum;
 

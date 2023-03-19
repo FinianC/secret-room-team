@@ -9,6 +9,8 @@
         <result column="price" property="price"/>
         <result column="order_num" property="orderNum"/>
         <result column="status" property="status"/>
+        <result column="payment_amount" property="paymentAmount"/>
+        <result column="quantity" property="quantity"/>
         <result column="create_time" property="createTime"/>
         <association property="ticketVo" javaType="com.secret.vo.applet.TicketVo">
             <id column="t_id" property="id"/>
@@ -27,6 +29,8 @@
         mt.price ,
         mt.order_num ,
         mt.status ,
+        mt.payment_amount ,
+        mt.quantity ,
         mt.create_time
     </sql>
 
