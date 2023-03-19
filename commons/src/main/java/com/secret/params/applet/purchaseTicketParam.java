@@ -11,15 +11,15 @@ import javax.validation.constraints.NotNull;
 @Data
 public class purchaseTicketParam {
 
-    @ApiModelProperty("票id")
+    @ApiModelProperty(value = "票id" ,required = true)
     @NotNull
     private  Integer ticketId;
     
-    @ApiModelProperty("电话号码")
+    @ApiModelProperty(value = "电话号码", required = true)
     @NotBlank
     private  String phone;
 
-    @ApiModelProperty("数量")
+    @ApiModelProperty(value ="数量", required = true)
     @NotNull
     private  Integer quantity;
 
