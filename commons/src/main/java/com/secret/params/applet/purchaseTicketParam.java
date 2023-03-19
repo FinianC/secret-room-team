@@ -19,4 +19,8 @@ public class purchaseTicketParam {
     @NotBlank
     private  String phone;
 
+    @ApiModelProperty("数量")
+    @NotNull
+    private  Integer quantity;
+
 }

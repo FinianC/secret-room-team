@@ -24,17 +24,16 @@ public enum FleetChangesEnum {
 
     public static String getHandle(int code) {
 
-        for (FleetChangesEnum var : FleetChangesEnum.values()) {
+        for (FleetChangesEnum var : FleetChangesEnum.values())
             if (code == var.getCode())
                 return var.getHandle();
-        }
         return "";
     }
     public static String getMessage(int code) {
 
-        for (FleetChangesEnum var : FleetChangesEnum.values()) {
-            if (code == var.getCode())
-                return var.getMessage();
+        for (FleetChangesEnum ss : FleetChangesEnum.values()) {
+            if (code == ss.getCode())
+                return ss.getMessage();
         }
         return "";
     }

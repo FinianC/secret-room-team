@@ -1,7 +1,7 @@
 package com.secret.utils;
 
 import com.secret.constant.RS;
-import com.secret.constant.SecretRoomConstant;
+import com.secret.constant.SysConfigConstant;
 import com.secret.exception.ServiceException;
 import com.secret.vo.applet.UserVerificationVo;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class UserLoginUtils {
 
     public static <T> UserVerificationVo<T> getUserInfo() {
         log.info("get into getUserInfo");
-        String token = getRequestHeaderMap().get(SecretRoomConstant.HEADER_TOKEN);
+        String token = getRequestHeaderMap().get(SysConfigConstant.HEADER_TOKEN);
         log.info("token {}",token);
         return  getUserInfo(token);
     }

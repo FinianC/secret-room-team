@@ -3,9 +3,6 @@ package com.secret.vo.applet;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 @Data
 @ApiModel("群聊消息")
